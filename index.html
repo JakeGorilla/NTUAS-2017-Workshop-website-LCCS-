@@ -29,21 +29,19 @@
 </head>
 
 <body>
-  <v-app id="app">
+  <v-app id="app" class="grey lighten-3">
     <v-toolbar class="amber darken-1" light>
-      <v-toolbar-title>Workshop</v-toolbar-title>
+      <v-toolbar-title><span class="black--text">Workshop for Typhoon, cloud and climate study</span></v-toolbar-title>
     </v-toolbar>
     <main>
-      <v-container fluid>
-        <v-layout row-sm column min-height>
-          <v-flex fill-height sidebar>
-            <v-card class="mx-1 my-4 grey lighten-2 ">
+      <v-container fluid class="pt-1">
+        <v-layout row-md column min-height>
+          <v-flex fill-height sidebar px-1>
+            <v-card img="atmoslogo.png" height="232px" class="mx-0 my-2 teal lighten-2 hidden-sm-and-down"></v-card>
+            <v-card class="mx-0 my-2 grey lighten-2">
               <v-list dense class="py-0">
                 <v-list-item v-for="item in items" :key="item">
                   <v-list-tile :to="item.to">
-                    <!--<v-list-tile-action>
-                      <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-tile-action>-->
                     <v-list-tile-content class="ml-2">
                       <v-list-tile-title><b>{{ item.title }}</b></v-list-tile-title>
                     </v-list-tile-content>
@@ -52,87 +50,106 @@
               </v-list>
             </v-card>
           </v-flex>
-          <v-flex fill-height flex1>
-            <v-container fluid class="px-0">
+          <v-flex fill-height flex1 px-1>
+            <v-container fluid class="px-0 py-2">
               <router-view></router-view>
             </v-container>
           </v-flex>
         </v-layout>
       </v-container>
-      <!--<v-container fluid>
-        <v-layout row-sm column :class="min-height">
-          <v-flex fill-height>
-            <v-card class="mx-1 my-4 grey lighten-1">
-              <v-list dense class="py-0">
-                <v-list-item v-for="item in items" :key="item">
-                  <v-list-tile>
-                    <v-list-tile-action>
-                      <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                      <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-flex>
-          <v-flex fill-height>
-            <v-container fluid class="px-0">
-              123
-            </v-container>
-          </v-flex>
-        </v-layout>
-      </v-container>-->
     </main>
   </v-app>
   <script>
-    Vue.component('home', {
-      template: '<span>123321</span>',
-      b:'<v-card class="mx-1 my-4 grey lighten-2 ">\
-                  <v-list dense class="py-0">\
-                    <v-list-item v-for="item in items" :key="item">\
-                      <v-list-tile :to="item.to">\
-                        <!--<v-list-tile-action>\
-                          <v-icon>{{ item.icon }}</v-icon>\
-                        </v-list-tile-action>-->\
-                        <v-list-tile-content class="ml-2">\
-                          <v-list-tile-title><b>{{ item.title }}</b></v-list-tile-title>\
-                        </v-list-tile-content>\
-                      </v-list-tile>\
-                    </v-list-item>\
-                  </v-list>\
+    Vue.component('base-content-card', {
+      props: ['title', 'contentHtml'],
+      template: '<v-card class="min-height">\
+                  <v-card-row class="grey darken-4" height="44px">\
+                    <v-card-title>\
+                      <span class="white--text">{{ title }}</span>\
+                    </v-card-title>\
+                  </v-card-row>\
+                  <slot>\
+                    <v-card-text v-html="contentHtml"></v-card-text>\
+                  </slot>\
                 </v-card>'
     })
 
-    Vue.component('registration', {})
+    var home = {
+      data: function () {
+        return {
+          title: 'Home',
+          contentHtml: ''
+        }
+      },
+      template: '<base-content-card :title="title" :contentHtml="contentHtml">\
+                  <v-layout row-md column min-height>\
+                    <v-flex fill-height px-1 flex1>\
+                      We opened the web page for the Workshop for Typhoon, cloud and climate study.\
+                    </v-flex>\
+                    <v-flex fill-height px-1 homeside>\
+                      <v-card class="ma-0 amber accent-2">\
+                        <v-subheader>Important Dates</v-subheader>\
+                      </v-card>\
+                    </v-flex>\
+                  </v-layout>\
+                </base-content-card>'
+    }
+
+    var agenda = {
+      data: function () {
+        return {
+          title: 'Agenda',
+          contentHtml: '8/22, 8/23  workshop<br>8/24  tour'
+        }
+      },
+      template: '<base-content-card :title="title" :contentHtml="contentHtml"></base-content-card>'
+    }
+
+    var tour = {
+      data: function () {
+        return {
+          title: 'Tour',
+          contentHtml: 'Vocation to where~'
+        }
+      },
+      template: '<base-content-card :title="title" :contentHtml="contentHtml"></base-content-card>'
+    }
+
+    var registration = {
+      data: function () {
+        return {
+          title: 'Registration',
+          contentHtml: 'attend please, Here is some information...<br>Hotel...<br>tour...<br><br><br>Registration'
+        }
+      },
+      template: '<base-content-card :title="title" :contentHtml="contentHtml"></base-content-card>'
+    }
 
     Vue.use(VueRouter)
-    var router = new VueRouter([{
-      path: '/',
-      component: 'home'
-    }, {
-      path: '/registration',
-      component: 'registration'
-    }])
+    var router = new VueRouter({
+      routes: [
+        { path: '/', component: home },
+        { path: '/agenda', component: agenda },
+        { path: '/tour', component: tour },
+        { path: '/registration', component: registration },
+      ]
+    })
 
-    new Vue({
+    var app = new Vue({
       router: router,
-      el: '#app',
       data: function () {
         return {
           drawer: null,
-          items: [{
-            title: 'Home',
-            to: '/'
-          }, {
-            title: 'Registration',
-            to: '/registration'
-          }],
+          items: [
+            { title: 'Home', to: '/#/' },
+            { title: 'Agenda', to: '/#/agenda' },
+            { title: 'Tour', to: '/#/tour' },
+            { title: 'Registration', to: '/#/registration' }
+          ],
           right: null
         }
       }
-    })
+    }).$mount('#app')
   </script>
 </body>
 
