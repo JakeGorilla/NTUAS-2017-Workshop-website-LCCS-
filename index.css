@@ -9,11 +9,9 @@ main {
   .sidebar {
     width: 240px;
   }
-
   .homeside {
-    width: 200px;
+    width: 220px;
   }
-
   .min-height {
     min-height: 600px;
     height: 600px;
@@ -22,4 +20,18 @@ main {
 
 .flex1 {
   flex: 1;
+}
+
+.v-enter-active {
+  transition: all .36s ease;
+}
+
+.v-leave-active {
+  transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.v-enter,
+.v-leave-active {
+  transform: translateX(10px);
+  /*opacity: .88;*/
 }

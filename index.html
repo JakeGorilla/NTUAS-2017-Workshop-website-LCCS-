@@ -52,7 +52,9 @@
           </v-flex>
           <v-flex fill-height flex1 px-1>
             <v-container fluid class="px-0 py-2">
-              <router-view></router-view>
+              <transition mode="out-in">
+                <router-view></router-view>
+              </transition>
             </v-container>
           </v-flex>
         </v-layout>
@@ -62,7 +64,7 @@
   <script>
     Vue.component('base-content-card', {
       props: ['title', 'contentHtml'],
-      template: '<v-card class="min-height">\
+      template: '<v-card class="min-height v-slide-x-transition">\
                   <v-card-row class="grey darken-4" height="44px">\
                     <v-card-title>\
                       <span class="white--text">{{ title }}</span>\
@@ -82,13 +84,17 @@
         }
       },
       template: '<base-content-card :title="title" :contentHtml="contentHtml">\
-                  <v-layout row-md column min-height>\
-                    <v-flex fill-height px-1 flex1>\
+                  <v-layout row-md column ma-0 px-2 py-3>\
+                    <v-flex fill-height px-1 mb-3 order-md1 order-sm2 order-xs2 flex1>\
                       We opened the web page for the Workshop for Typhoon, cloud and climate study.\
                     </v-flex>\
-                    <v-flex fill-height px-1 homeside>\
+                    <v-flex fill-height px-1 mb-3 order-md2 order-sm1 order-xs1 homeside>\
                       <v-card class="ma-0 amber accent-2">\
                         <v-subheader>Important Dates</v-subheader>\
+                        <v-container fluid class="px-3 pb-3 pt-0">\
+                          Registration Deadline<br>\
+                          Aug 22, 2017<br>\
+                        </v-container>\
                       </v-card>\
                     </v-flex>\
                   </v-layout>\
@@ -127,11 +133,26 @@
 
     Vue.use(VueRouter)
     var router = new VueRouter({
-      routes: [
-        { path: '/', component: home },
-        { path: '/agenda', component: agenda },
-        { path: '/tour', component: tour },
-        { path: '/registration', component: registration },
+      routes: [{
+          path: '/',
+          redirect: '/home'
+        },
+        {
+          path: '/home',
+          component: home
+        },
+        {
+          path: '/agenda',
+          component: agenda
+        },
+        {
+          path: '/tour',
+          component: tour
+        },
+        {
+          path: '/registration',
+          component: registration
+        },
       ]
     })
 
@@ -140,11 +161,22 @@
       data: function () {
         return {
           drawer: null,
-          items: [
-            { title: 'Home', to: '/#/' },
-            { title: 'Agenda', to: '/#/agenda' },
-            { title: 'Tour', to: '/#/tour' },
-            { title: 'Registration', to: '/#/registration' }
+          items: [{
+              title: 'Home',
+              to: '/#/'
+            },
+            {
+              title: 'Agenda',
+              to: '/#/agenda'
+            },
+            {
+              title: 'Tour',
+              to: '/#/tour'
+            },
+            {
+              title: 'Registration',
+              to: '/#/registration'
+            }
           ],
           right: null
         }
