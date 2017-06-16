@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Submit Info</title>
+  <!-- Font library and icon pack -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <!-- for IE -->
+  <script src="IE-compatible.js"></script>
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+  <!-- Vuetify.js required files -->
+  <script src="https://unpkg.com/vuetify/dist/vuetify.min.js"></script>
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet" type="text/css">
+  <!-- my style -->
+  <link href="register.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <v-app id="app" class="blue lighten-4">
+    <v-layout justify-center>
+      <v-flex fill-height xs12 sm11 md10 lg9>
+        <v-card id="main">
+          <v-card-row>
+            <v-toolbar light>
+              <v-btn icon="icon" @click.native="history.back()" light>
+                <v-icon>arrow_back</v-icon>
+              </v-btn>
+              <v-toolbar-title v-text="title"></v-toolbar-title>
+              <v-btn light flat @click.native="submit">Submit</v-btn>
+            </v-toolbar>
+          </v-card-row>
+          <div>
+            <v-container class="ma-0 pa-0">
+              <div class="subheader subheader--dark">Personal information</div>
+              <v-container class="ma-0 px-3 py-0">
+                <v-layout ma-0 row-sm column>
+                  <v-flex xs6 sm2 py-2>
+                    <v-select v-bind:items="nameTitles" v-model="nameTitle" label="title" single-line required auto class="my-0"></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm5 py-2>
+                    <v-text-field label="First Name" required class="my-0"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm5 py-2>
+                    <v-text-field label="Last Name" required class="my-0"></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-flex xs12>
+                  <v-text-field label="Email" required type="email"></v-text-field>
+                  <v-text-field label="Affiliation" required></v-text-field>
+                  <v-text-field label="Job Title" required></v-text-field>
+                </v-flex>
+              </v-container>
+            </v-container>
+          </div>
+          <v-list three-line subheader>
+            <v-divider></v-divider>
+            <v-subheader>Workshop from 12pm, 8/22 to 13pm, 8/24</v-subheader>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="joinTour"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Join the tour</v-list-tile-title>
+                  <v-list-tile-sub-title>8/24, time TBD</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="doOral"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Oral</v-list-tile-title>
+                  <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="doPoster"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Poster</v-list-tile-title>
+                  <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="hotel"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>代訂住宿</v-list-tile-title>
+                  <v-list-tile-sub-title>住多久</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-layout v-if="hotel" mx-0 column row-sm wrap>
+              <v-flex xs5 offset-sm1>
+                <v-menu v-model="hotelStartMenu" lazy :close-on-content-click="false" transition="v-scale-transition" offset-y :nudge-left="40">
+                  <v-text-field label="From" v-model="hotelStartDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                  <v-date-picker v-model="hotelStartDate" no-title scrollable actions dark></v-date-picker>
+                </v-menu>
+              </v-flex>
+              <v-flex xs5>
+                <v-menu v-model="hotelEndMenu" lazy :close-on-content-click="false" transition="v-scale-transition" offset-y :nudge-left="40">
+                  <v-text-field label="To" v-model="hotelEndDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                  <v-date-picker v-model="hotelEndDate" no-title scrollable actions dark></v-date-picker>
+                </v-menu>
+              </v-flex>
+            </v-layout>
+          </v-list>
+          <transition-group>
+            <div v-if="doOral" key="oral">
+              <v-divider></v-divider>
+              <v-container class="ma-0 pa-0">
+                <div class="subheader subheader--dark">Oral Presentation Information</div>
+                <v-container class="ma-0 px-3 py-0">
+                  <v-text-field label="Title" v-model="oralTitle" required></v-text-field>
+                  <v-text-field label="Abstract" v-model="oralAbs" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
+                </v-container>
+              </v-container>
+            </div>
+            <div v-if="doPoster" key="poster">
+              <v-divider></v-divider>
+              <v-container class="ma-0 pa-0">
+                <div class="subheader subheader--dark">Poster Information</div>
+                <v-container class="ma-0 px-3 py-0">
+                  <v-text-field label="Title" v-model="posterTitle" required></v-text-field>
+                  <v-text-field label="Abstract" v-model="posterAbs" :hint="hintPosterAbs" persistent-hint counter max="500" multi-line></v-text-field>
+                </v-container>
+              </v-container>
+            </div>
+          </transition-group>
+          <v-card-row height="56" class="grey lighten-4 mt-3"></v-card-row>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-app>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          title: 'Register',
+          nameTitle: '',
+          nameTitles: ['Mr.','Ms.'],
+          doOral: false,
+          doPoster: false,
+          joinTour: true,
+          hotel: false,
+          hotelStartMenu: false,
+          hotelStartDate: null,
+          hotelEndMenu: false,
+          hotelEndDate: null,
+          oralTitle: '',
+          oralAbs: '',
+          hintOralAbs: '300~500 words, you can submit abstract by sending email later',
+          posterTitle: '',
+          posterAbs: '',
+          hintPosterAbs: '300~500 words, you can submit abstract by sending email later'
+        }
+      },
+      methods: {
+        submit: function () {
+          console.log('placeholder')
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

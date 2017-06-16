@@ -22,15 +22,15 @@
 </head>
 
 <body>
-  <v-app id="app" class="grey lighten-3">
+  <v-app id="app" class="grey lighten-3 app-width">
     <v-toolbar class="amber darken-1" light>
       <v-toolbar-title><span class="black--text">Workshop for Typhoon, cloud and climate study</span></v-toolbar-title>
     </v-toolbar>
     <main>
       <v-container fluid class="pt-1">
-        <v-layout row-md column min-height>
+        <v-layout row-sm column min-height>
           <v-flex fill-height sidebar px-1>
-            <v-card img="atmoslogo.png" height="232px" class="mx-0 my-2 teal lighten-2 hidden-sm-and-down"></v-card>
+            <v-card img="atmoslogo.png" height="232px" class="mx-0 my-2 teal lighten-2 hidden-xs-only"></v-card>
             <v-card class="mx-0 my-2 grey lighten-2">
               <v-list dense class="py-0">
                 <v-list-item v-for="item in items" :key="item">
@@ -121,11 +121,7 @@
         return {
           title: 'Registration',
           contentHtml: '',
-          regDialog: false,
-          attendWorkshop: true,
-          oralPre: false,
-          posterPre: false,
-          joinTour: true
+          link: 'register.html'
         }
       },
       methods: {
@@ -138,7 +134,7 @@
         <base-content-card :title="title" :contentHtml="contentHtml">\
           <v-container fluid class="ma-0 pa-3">\
             attend please, Here is some information...<br>Hotel...<br>tour...<br><br><br>\
-            <v-btn primary light exact :tag="\'a\'" :href="\'submit.html\'">Go Registration</v-btn>\
+            <v-btn primary light exact tag="a" :href="link">Go Registration</v-btn>\
           </v-container>\
         </base-content-card>'
     }

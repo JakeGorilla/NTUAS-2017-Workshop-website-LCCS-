@@ -5,7 +5,13 @@ main {
   margin: 0 auto;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 600px) {
+  html {
+    overflow-x: auto;
+  }
+  .app-width {
+    min-width: 960px;
+  }
   .sidebar {
     width: 240px;
   }
@@ -39,6 +45,7 @@ main {
   transform: translateX(10px);
   opacity: 0;
 }
+
 
 /*.dialog--fullscreen .toolbar .btn:last-child {
   margin: initial !important;
