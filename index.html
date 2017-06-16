@@ -135,128 +135,14 @@
         }
       },
       template: '\
-<base-content-card :title="title" :contentHtml="contentHtml">\
-  <v-container fluid class="ma-0 pa-3">\
-    attend please, Here is some information...<br>Hotel...<br>tour...<br><br><br>\
-    <v-card-row>\
-      <v-layout row wrap justify-center>\
-        <v-dialog v-model="regDialog" fullscreen transition="v-dialog-bottom-transition" :overlay=false>\
-          <v-btn primary light slot="activator">Go Registration</v-btn>\
-          <v-card>\
-            <v-card-row>\
-              <v-toolbar light>\
-                <v-btn light icon="icon" @click.native="closeRegDialog">\
-                  <v-icon>close</v-icon>\
-                </v-btn>\
-                <v-toolbar-title>Registration</v-toolbar-title>\
-                <v-btn light flat @click.native="closeRegDialog">Submit</v-btn>\
-              </v-toolbar>\
-            </v-card-row>\
-            <v-list three-line subheader>\
-              <v-subheader>I want to ...</v-subheader>\
-              <v-list-item>\
-                <v-list-tile avatar tag="div">\
-                  <v-list-tile-action>\
-                    <v-checkbox v-model="attendWorkshop"></v-checkbox>\
-                  </v-list-tile-action>\
-                  <v-list-tile-content>\
-                    <v-list-tile-title>Attend Workshop</v-list-tile-title>\
-                    <v-list-tile-sub-title>From 12pm, 8/22 to 17pm, 8/23</v-list-tile-sub-title>\
-                  </v-list-tile-content>\
-                </v-list-tile>\
-              </v-list-item>\
-              <v-list-item>\
-                <v-list-tile avatar tag="div">\
-                  <v-list-tile-action>\
-                    <v-checkbox v-model="oralPre"></v-checkbox>\
-                  </v-list-tile-action>\
-                  <v-list-tile-content>\
-                    <v-list-tile-title>Give an oral presentation</v-list-tile-title>\
-                    <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>\
-                  </v-list-tile-content>\
-                </v-list-tile>\
-              </v-list-item>\
-              <v-list-item>\
-                <v-list-tile avatar tag="div">\
-                  <v-list-tile-action>\
-                    <v-checkbox v-model="posterPre"></v-checkbox>\
-                  </v-list-tile-action>\
-                  <v-list-tile-content>\
-                    <v-list-tile-title>Show a poster</v-list-tile-title>\
-                    <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>\
-                  </v-list-tile-content>\
-                </v-list-tile>\
-              </v-list-item>\
-              <v-list-item>\
-                <v-list-tile avatar tag="div">\
-                  <v-list-tile-action>\
-                    <v-checkbox v-model="joinTour"></v-checkbox>\
-                  </v-list-tile-action>\
-                  <v-list-tile-content>\
-                    <v-list-tile-title>Join the tour</v-list-tile-title>\
-                    <v-list-tile-sub-title>8/24, time TBD</v-list-tile-sub-title>\
-                  </v-list-tile-content>\
-                </v-list-tile>\
-              </v-list-item>\
-            </v-list>\
-            <div>\
-              <v-divider></v-divider>\
-              <v-container class="ma-0 pa-0">\
-                <div class="subheader subheader--dark">Personal information</div>\
-                <v-container class="ma-0 px-3 py-0">\
-                  <v-text-field label="Name" required></v-text-field>\
-                  <v-text-field label="Email" required></v-text-field>\
-                </v-container>\
-              </v-container>\
-            </div>\
-            <div v-if="oralPre">\
-              <v-divider></v-divider>\
-              <v-list three-line subheader>\
-                <v-subheader>Oral Presentation Information</v-subheader>\
-                <v-list-item>\
-                  <v-list-tile avatar tag="div">\
-                    <v-list-tile-action>\
-                      <v-checkbox></v-checkbox>\
-                    </v-list-tile-action>\
-                    <v-list-tile-content>\
-                      <v-list-tile-title>Notifications</v-list-tile-title>\
-                      <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>\
-                    </v-list-tile-content>\
-                  </v-list-tile>\
-                </v-list-item>\
-                <v-list-item>\
-                  <v-list-tile avatar tag="div">\
-                    <v-list-tile-action>\
-                      <v-checkbox></v-checkbox>\
-                    </v-list-tile-action>\
-                    <v-list-tile-content>\
-                      <v-list-tile-title>Sound</v-list-tile-title>\
-                      <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>\
-                    </v-list-tile-content>\
-                  </v-list-tile>\
-                </v-list-item>\
-                <v-list-item>\
-                  <v-list-tile avatar tag="div">\
-                    <v-list-tile-action>\
-                      <v-checkbox></v-checkbox>\
-                    </v-list-tile-action>\
-                    <v-list-tile-content>\
-                      <v-list-tile-title>Auto-add widgets</v-list-tile-title>\
-                      <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>\
-                    </v-list-tile-content>\
-                  </v-list-tile>\
-                </v-list-item>\
-              </v-list>\
-            </div>\
-          </v-card>\
-        </v-dialog>\
-      </v-layout>\
-    </v-card-row>\
-  </v-container>\
-</base-content-card>'
+        <base-content-card :title="title" :contentHtml="contentHtml">\
+          <v-container fluid class="ma-0 pa-3">\
+            attend please, Here is some information...<br>Hotel...<br>tour...<br><br><br>\
+            <v-btn primary light exact :tag="\'a\'" :href="\'submit.html\'">Go Registration</v-btn>\
+          </v-container>\
+        </base-content-card>'
     }
 
-    Vue.use(VueRouter)
     var router = new VueRouter({
       routes: [{
         path: '/',
@@ -283,7 +169,7 @@
           drawer: null,
           items: [{
             title: 'Home',
-            to: '/#/'
+            to: '/#/home'
           }, {
             title: 'Agenda',
             to: '/#/agenda'

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Submit Info</title>
+  <!-- Font library and icon pack -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <!-- for IE -->
+  <script src="IE-compatible.js"></script>
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+  <!-- Router -->
+  <script src="https://unpkg.com/vue-router/dist/vue-router.min.js"></script>
+  <!-- Vuetify.js required files -->
+  <script src="https://unpkg.com/vuetify/dist/vuetify.min.js"></script>
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet" type="text/css">
+  <!-- my style -->
+  <link href="submit.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <v-app id="app" class="blue lighten-4">
+    <v-layout justify-center>
+      <v-flex fill-height xs12 sm11 md10 lg9>
+        <v-card id="main">
+          <v-card-row>
+            <v-toolbar light>
+              <v-toolbar-title v-text="title"></v-toolbar-title>
+              <v-btn light flat @click.native="closeRegDialog">Submit</v-btn>
+            </v-toolbar>
+          </v-card-row>
+          <v-list three-line subheader>
+            <v-subheader>I want to ...</v-subheader>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="attendWorkshop"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Attend Workshop</v-list-tile-title>
+                  <v-list-tile-sub-title>From 12pm, 8/22 to 17pm, 8/23</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="oralPre"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Give an oral presentation</v-list-tile-title>
+                  <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="posterPre"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Show a poster</v-list-tile-title>
+                  <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+            <v-list-item>
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action>
+                  <v-checkbox v-model="joinTour"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Join the tour</v-list-tile-title>
+                  <v-list-tile-sub-title>8/24, time TBD</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>
+          </v-list>
+          <div>
+            <v-divider></v-divider>
+            <v-container class="ma-0 pa-0">
+              <div class="subheader subheader--dark">Personal information</div>
+              <v-container class="ma-0 px-3 py-0">
+                <v-text-field label="Name" required></v-text-field>
+                <v-text-field label="Email" required></v-text-field>
+              </v-container>
+            </v-container>
+          </div>
+          <div v-if="oralPre">
+            <v-divider></v-divider>
+            <v-list three-line subheader>
+              <v-subheader>Oral Presentation Information</v-subheader>
+              <v-list-item>
+                <v-list-tile avatar tag="div">
+                  <v-list-tile-action>
+                    <v-checkbox></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Notifications</v-list-tile-title>
+                    <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list-item>
+              <v-list-item>
+                <v-list-tile avatar tag="div">
+                  <v-list-tile-action>
+                    <v-checkbox></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Sound</v-list-tile-title>
+                    <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list-item>
+              <v-list-item>
+                <v-list-tile avatar tag="div">
+                  <v-list-tile-action>
+                    <v-checkbox></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Auto-add widgets</v-list-tile-title>
+                    <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list-item>
+            </v-list>
+          </div>
+          <v-bottom-nav absolute value="true" class="transparent">
+            <v-btn flat dark class="teal--text" @click.native="tab = 1" :value="tab === 1">
+              <span>Registration</span>
+              <v-icon>history</v-icon>
+            </v-btn>
+            <v-btn flat dark class="teal--text" @click.native="tab = 2" :value="tab === 2">
+              <span>Field Trip</span>
+              <v-icon>favorite</v-icon>
+            </v-btn>
+            <v-btn flat dark class="teal--text" @click.native="tab = 3" :value="tab === 3">
+              <span>Abstract</span>
+              <v-icon>place</v-icon>
+            </v-btn>
+          </v-bottom-nav>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-app>
+  <script>
+    var router = new VueRouter({
+      routes: [{
+        path: '/', redirect: 'registration'
+      }, {
+        path: 'registration', beforeEnter: function (to) {
+          console.log('aaa')
+          app.tab = 2
+        }
+      }]
+    })
+    var app = new Vue({
+      router: router,
+      el: '#app',
+      data: function () {
+        return {
+          title: 'Registration',
+          contentHtml: '',
+          regDialog: false,
+          attendWorkshop: true,
+          oralPre: false,
+          posterPre: false,
+          joinTour: true,
+          tab: 1
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>
