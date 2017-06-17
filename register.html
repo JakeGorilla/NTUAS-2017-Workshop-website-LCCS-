@@ -87,7 +87,7 @@
             <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
-                  <v-checkbox v-model="doOral"></v-checkbox>
+                  <v-checkbox v-model="doOral" :disabled="doPoster"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
                   <v-list-tile-title>Oral Presentation</v-list-tile-title>
@@ -111,7 +111,7 @@
             <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
-                  <v-checkbox v-model="doPoster"></v-checkbox>
+                  <v-checkbox v-model="doPoster" :disabled="doOral"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
                   <v-list-tile-title>Poster</v-list-tile-title>
