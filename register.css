@@ -18,8 +18,23 @@
   width: 100%;
 }
 
+/*#talktime > */
+
 .indent {
   margin-left: 42px;
+}
+
+.virtical-enter-active {
+  transition: all .36s ease;
+}
+
+.virtical-leave-active {
+  transition: all 0s;
+}
+
+.virtical-enter {
+  transform: translateY(-44px);
+  opacity: 0;
 }
 
 .v-enter-active {

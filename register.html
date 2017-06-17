@@ -84,7 +84,7 @@
                 </v-menu>
               </v-flex>
             </v-layout>
-            <v-list-item>
+            <v-list-item v-if="!doPoster" key="oral">
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
                   <v-checkbox v-model="doOral" :disabled="doPoster"></v-checkbox>
@@ -95,7 +95,7 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
-            <div v-if="doOral" id="oralWithPoster" class="indent">
+            <div v-if="doOral" id="oralWithPoster" key="posterToOral" class="indent">
               <v-checkbox v-model="oralWithPoster" label=" With a poster about same topic"></v-checkbox>
             </div>
             <!--<v-list-item v-if="doOral">
@@ -108,18 +108,20 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>-->
-            <v-list-item>
-              <v-list-tile avatar tag="div">
-                <v-list-tile-action>
-                  <v-checkbox v-model="doPoster" :disabled="doOral"></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>Poster</v-list-tile-title>
-                  <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list-item>
-            <v-list-item>
+            <transition name="virtical">
+              <v-list-item v-if="!doOral" key="poster">
+                <v-list-tile avatar tag="div">
+                  <v-list-tile-action>
+                    <v-checkbox v-model="doPoster" :disabled="doOral"></v-checkbox>
+                  </v-list-tile-action>
+                  <v-list-tile-content>
+                    <v-list-tile-title>Poster</v-list-tile-title>
+                    <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list-item>
+            </transition>
+            <v-list-item key="tour">
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
                   <v-checkbox v-model="joinTour"></v-checkbox>
@@ -132,18 +134,19 @@
             </v-list-item>
           </v-list>
           <transition-group>
-            <div v-if="doOral" key="oral">
+            <div v-if="doOral" key="oralInfo">
               <v-divider></v-divider>
               <v-container class="ma-0 pa-0">
                 <div class="subheader subheader--dark">Oral Presentation Information</div>
                 <v-container class="ma-0 px-3 py-0">
                   <v-text-field label="Title" v-model="oralTitle" required></v-text-field>
-                  <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" single-line required class="my-0"></v-select>
+                  <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" :hint="talkTimeHint" :persistent-hint="!oralWithPoster"
+                    single-line required class="my-0"></v-select>
                   <v-text-field label="Abstract" v-model="oralAbs" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
                 </v-container>
               </v-container>
             </div>
-            <div v-if="doPoster" key="poster">
+            <div v-if="doPoster" key="posterInfo">
               <v-divider></v-divider>
               <v-container class="ma-0 pa-0">
                 <div class="subheader subheader--dark">Poster Information</div>
@@ -177,13 +180,20 @@
           hotelEndMenu: false,
           hotelEndDate: null,
           oralTitle: '',
-          timeOptions: ['5 mins','15 mins'],
           oralTime: null,
           oralAbs: '',
           hintOralAbs: '300~500 words, you can submit abstract later by sending email',
           posterTitle: '',
           posterAbs: '',
           hintPosterAbs: '300~500 words, you can submit abstract later by sending email'
+        }
+      },
+      computed: {
+        timeOptions: function () {
+          return this.oralWithPoster ? ['Talk 5 mins', 'Talk 15 mins'] : ['Talk 15 mins']
+        },
+        talkTimeHint: function () {
+          return this.oralWithPoster ? '' : 'Without a poster, we hope you can provide a 15min talk'
         }
       },
       methods: {
