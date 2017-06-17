@@ -7,6 +7,11 @@
   padding-bottom: 66px;
 }*/
 
+.hotel-time .input-group {
+  max-width: 100%;
+  min-width: 222px;
+}
+
 #oralWithPoster>div>label {
   margin-left: 40px;
   color: rgba(0, 0, 0, .87);

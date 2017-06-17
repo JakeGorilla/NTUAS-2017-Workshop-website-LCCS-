@@ -71,13 +71,13 @@
               </v-list-tile>
             </v-list-item>
             <v-layout v-if="hotel" mx-0 column row-sm wrap>
-              <v-flex offset-sm1>
+              <v-flex offset-sm1 hotel-time>
                 <v-menu v-model="hotelStartMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
                   <v-text-field label="Check-in" v-model="hotelStartDate" slot="activator" prepend-icon="event" readonly></v-text-field>
                   <v-date-picker v-model="hotelStartDate" no-title scrollable actions dark></v-date-picker>
                 </v-menu>
               </v-flex>
-              <v-flex flex>
+              <v-flex flex hotel-time>
                 <v-menu v-model="hotelEndMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
                   <v-text-field label="Check-out" v-model="hotelEndDate" slot="activator" prepend-icon="event" readonly></v-text-field>
                   <v-date-picker v-model="hotelEndDate" no-title scrollable actions dark></v-date-picker>
@@ -182,6 +182,13 @@
         },
         talkTimeHint: function () {
           return this.oralWithPoster ? '' : 'Without a poster, we hope you can provide a 15min talk'
+        }
+      },
+      watch: {
+        oralWithPoster: function () {
+          if (this.oralTime && !this.timeOptions.includes(this.oralTime)) {
+            this.oralTime = null
+          }
         }
       },
       methods: {

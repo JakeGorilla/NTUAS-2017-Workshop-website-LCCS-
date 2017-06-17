@@ -62,7 +62,7 @@
       template: '<v-card class="min-height v-slide-x-transition">\
                   <v-card-row class="grey darken-4" height="44px">\
                     <v-card-title>\
-                      <span class="white--text">{{ title }}</span>\
+                      <span class="white--text sec-title">{{ title }}</span>\
                     </v-card-title>\
                   </v-card-row>\
                   <slot>\
@@ -81,9 +81,9 @@
         }
       },
       template: '<base-content-card :title="title">\
-                  <v-layout row-sm column ma-0 px-2 py-3>\
-                    <v-flex v-html="contentHtml" fill-height px-1 mb-3 order-sm1 order-xs2 flex1></v-flex>\
-                    <v-flex fill-height px-1 mb-3 order-sm2 order-xs1 homeside>\
+                  <v-layout row-sm column ma-0 pa-3>\
+                    <v-flex v-html="contentHtml" pa-0 mb-3 order-sm1 order-xs2 flex1></v-flex>\
+                    <v-flex pa-0 mb-3 order-sm2 order-xs1 homeside>\
                       <v-card class="ma-0 amber accent-2">\
                         <v-subheader>Important Dates</v-subheader>\
                         <v-container fluid class="px-3 pb-3 pt-0">\
@@ -104,6 +104,69 @@
         }
       },
       template: '<base-content-card :title="title" :contentHtml="contentHtml"></base-content-card>'
+    }
+
+    var gis = {
+      data: function () {
+        return {
+          title: 'Exhibition Information',
+        }
+      },
+      template: '<base-content-card :title="title">\
+                  <div class="pa-3">\
+                    <h6 class="title">GIS NTU Convention Center</h6>\
+                    <img src="gis.jpg" class="main-img">\
+                    <ul>\
+                      <li>Website: <a href="https://www.meeting.com.tw/" target="_blank">https://www.meeting.com.tw/</a></li>\
+                      <li>Location: B1F., No.85, Sec. 4, Roosevelt Rd., Zhongzheng Dist., Taipei City 100, Taiwan R.O.C.</li>\
+                    </ul>\
+                  </div>\
+                </base-content-card>'
+    }
+
+    var hotel = {
+      data: function () {
+        return {
+          title: 'Hotel Information',
+        }
+      },
+      template: '<base-content-card :title="title">\
+                  <div class="pa-3">\
+                    <div class="pb-3">\
+                      <h6 class="title">Hisu-Chi House</h6>\
+                      <img src="gis.jpg" class="main-img">\
+                      <ul>\
+                        <li>Website: <a href="https://ntudorm.prince.com.tw/Institute_List.aspx" target="_blank">https://ntudorm.prince.com.tw/Institute_List.aspx</a></li>\
+                        <li>Location: No.16-2,16-3,16-5, Siyuan St., Zhongzheng Dist., Taipei City 100, Taiwan R.O.C.</li>\
+                      </ul>\
+                    </div>\
+                    <div class="pb-3">\
+                      <h6 class="title">Just Sleep @ NTU</h6>\
+                      <img src="gis.jpg" class="main-img">\
+                      <ul>\
+                        <li>Website: <a href="http://www.justsleep.com.tw/main/en" target="_blank">http://www.justsleep.com.tw/main/en</a></li>\
+                        <li>Location: No. 83, Sec. 4, Roosevelt Rd., Taipei 10673, Taiwan</li>\
+                      </ul>\
+                    </div>\
+                  </div>\
+                </base-content-card>'
+    }
+
+    var ntuas = {
+      data: function () {
+        return {
+          title: 'Atmospheric Sciences Society, NTU',
+        }
+      },
+      template: '<base-content-card :title="title">\
+                  <div class="pa-3">\
+                    <img src="ntuas.jpg" class="main-img">\
+                    <ul>\
+                      <li>Website: <a href="http://www.as.ntu.edu.tw/index.php/eng" target="_blank">http://www.as.ntu.edu.tw/index.php/eng</a></li>\
+                      <li>Location: <br></li>\
+                    </ul>\
+                  </div>\
+                </base-content-card>'
     }
 
     var tour = {
@@ -150,6 +213,15 @@
         path: '/agenda',
         component: agenda
       }, {
+        path: '/gis',
+        component: gis
+      }, {
+        path: '/hotel',
+        component: hotel
+      }, {
+        path: '/ntuas',
+        component: ntuas
+      }, {
         path: '/tour',
         component: tour
       }, {
@@ -166,13 +238,22 @@
           items: [{
             title: 'Home',
             to: '/#/home'
-          // }, {
-          //   title: 'Agenda',
-          //   to: '/#/agenda'
           }, {
-            title: 'Tour',
-            to: '/#/tour'
+            //   title: 'Agenda',
+            //   to: '/#/agenda'
+            // }, {
+            title: 'Exhibition',
+            to: '/#/gis'
           }, {
+            title: 'Hotel',
+            to: '/#/hotel'
+          }, {
+            title: 'NTUAS',
+            to: '/#/ntuas'
+          }, {
+            //   title: 'Tour',
+            //   to: '/#/tour'
+            // }, {
             title: 'Registration',
             to: '/#/registration'
           }],

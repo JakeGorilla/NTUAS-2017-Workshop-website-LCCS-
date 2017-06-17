@@ -20,12 +20,24 @@ main {
   }
   .min-height {
     min-height: 600px;
-    height: 600px;
+  }
+  .flex1 {
+    flex: 1;
   }
 }
 
 .flex1 {
-  flex: 1;
+  flex-basis: 1 1 0;
+}
+
+.sec-title {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.main-img {
+  width: 100%;
+  max-width: 600px;
 }
 
 .v-enter-active {
