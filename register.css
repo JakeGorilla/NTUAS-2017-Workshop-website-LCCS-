@@ -9,7 +9,7 @@
 
 #oralWithPoster>div>label {
   margin-left: 40px;
-  color: rgba(0,0,80,.87);
+  color: rgba(0, 0, 0, .87);
   height: auto;
   font-weight: 400;
   white-space: nowrap;
@@ -18,21 +18,27 @@
   width: 100%;
 }
 
+
 /*#talktime > */
 
 .indent {
   margin-left: 42px;
+  margin-bottom: 36px;
 }
 
-.virtical-enter-active {
+.disable-color {
+  color: rgba(0, 0, 0, .54);
+}
+
+#posterOption {
+  height: 88px;
+}
+
+.vertical-enter-active {
   transition: all .36s ease;
 }
 
-.virtical-leave-active {
-  transition: all 0s;
-}
-
-.virtical-enter {
+.vertical-enter {
   transform: translateY(-44px);
   opacity: 0;
 }
@@ -41,10 +47,12 @@
   transition: all .36s ease;
 }
 
-.v-leave-active {
-  transition: all 0s;
-  /*transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);*/
-}
+
+/*.v-leave-active {
+  transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transform: translateX(10px);
+  opacity: 0;
+}*/
 
 .v-enter {
   transform: translateX(-5px);

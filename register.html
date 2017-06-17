@@ -29,7 +29,7 @@
               <v-btn icon="icon" @click.native="history.back()" light>
                 <v-icon>arrow_back</v-icon>
               </v-btn>
-              <v-toolbar-title v-text="title"></v-toolbar-title>
+              <v-toolbar-title v-text="pageTitle"></v-toolbar-title>
               <v-btn light flat @click.native="submit">Submit</v-btn>
             </v-toolbar>
           </v-card-row>
@@ -84,32 +84,22 @@
                 </v-menu>
               </v-flex>
             </v-layout>
-            <v-list-item v-if="!doPoster" key="oral">
+            <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
                   <v-checkbox v-model="doOral" :disabled="doPoster"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>Oral Presentation</v-list-tile-title>
+                  <v-list-tile-title v-bind:class="{'disable-color':doPoster}">Oral Presentation</v-list-tile-title>
                   <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
-            <div v-if="doOral" id="oralWithPoster" key="posterToOral" class="indent">
-              <v-checkbox v-model="oralWithPoster" label=" With a poster about same topic"></v-checkbox>
-            </div>
-            <!--<v-list-item v-if="doOral">
-              <v-list-tile avatar tag="div" class="indent">
-                <v-list-tile-action>
-                  <v-checkbox v-model="oralWithPoster" label="With a poster of same topic"></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                  <v-list-tile-title>└─ With a poster of same topic</v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list-item>-->
-            <transition name="virtical">
-              <v-list-item v-if="!doOral" key="poster">
+            <transition-group name="vertical" id="posterOption" tag="div">
+              <div v-if="doOral" id="oralWithPoster" class="indent" key="withOral">
+                <v-checkbox v-model="oralWithPoster" label=" With a poster about same topic"></v-checkbox>
+              </div>
+              <v-list-item v-if="!doOral" key="noOral">
                 <v-list-tile avatar tag="div">
                   <v-list-tile-action>
                     <v-checkbox v-model="doPoster" :disabled="doOral"></v-checkbox>
@@ -120,8 +110,8 @@
                   </v-list-tile-content>
                 </v-list-tile>
               </v-list-item>
-            </transition>
-            <v-list-item key="tour">
+            </transition-group>
+            <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
                   <v-checkbox v-model="joinTour"></v-checkbox>
@@ -134,25 +124,25 @@
             </v-list-item>
           </v-list>
           <transition-group>
-            <div v-if="doOral" key="oralInfo">
+            <div v-if="doOral" key="oral">
               <v-divider></v-divider>
               <v-container class="ma-0 pa-0">
                 <div class="subheader subheader--dark">Oral Presentation Information</div>
                 <v-container class="ma-0 px-3 py-0">
-                  <v-text-field label="Title" v-model="oralTitle" required></v-text-field>
+                  <v-text-field label="Title" v-model="title" required></v-text-field>
                   <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" :hint="talkTimeHint" :persistent-hint="!oralWithPoster"
                     single-line required class="my-0"></v-select>
-                  <v-text-field label="Abstract" v-model="oralAbs" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
+                  <v-text-field label="Abstract" v-model="abstract" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
                 </v-container>
               </v-container>
             </div>
-            <div v-if="doPoster" key="posterInfo">
+            <div v-if="doPoster" key="poster">
               <v-divider></v-divider>
               <v-container class="ma-0 pa-0">
                 <div class="subheader subheader--dark">Poster Information</div>
                 <v-container class="ma-0 px-3 py-0">
-                  <v-text-field label="Title" v-model="posterTitle" required></v-text-field>
-                  <v-text-field label="Abstract" v-model="posterAbs" :hint="hintPosterAbs" persistent-hint counter max="500" multi-line></v-text-field>
+                  <v-text-field label="Title" v-model="title" required></v-text-field>
+                  <v-text-field label="Abstract" v-model="abstract" :hint="hintPosterAbs" persistent-hint counter max="500" multi-line></v-text-field>
                 </v-container>
               </v-container>
             </div>
@@ -167,7 +157,7 @@
       el: '#app',
       data: function () {
         return {
-          title: 'Register',
+          pageTitle: 'Register',
           nameTitle: '',
           nameTitles: ['Mr.', 'Ms.', 'Dr.', 'Prof.'],
           doOral: false,
@@ -179,12 +169,10 @@
           hotelStartDate: null,
           hotelEndMenu: false,
           hotelEndDate: null,
-          oralTitle: '',
+          title: '',
+          abstract: '',
           oralTime: null,
-          oralAbs: '',
           hintOralAbs: '300~500 words, you can submit abstract later by sending email',
-          posterTitle: '',
-          posterAbs: '',
           hintPosterAbs: '300~500 words, you can submit abstract later by sending email'
         }
       },
