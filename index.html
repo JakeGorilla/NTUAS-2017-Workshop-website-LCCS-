@@ -75,15 +75,15 @@
       data: function () {
         return {
           title: 'Home',
-          contentHtml: ''
+          contentHtml: '<h6 class="title">Workshop for Typhoon, cloud and climate study</h6>\
+                        <div class="subheading mb-3">August 22-24, 2017</div>\
+                        <p class="b1">Following the spirits of the previous University Allied Workshop (UAW) but at a smaller scale and with a more focused scope, a workshop was organized by Prof. Masaki Satoh during the period Sep. 29―Oct. 1, 2015, at the Atmosphere and Ocean Research Institute, the University of Tokyo. A follow-up of the workshop is being organized for the period of August 22-24, 2017 in the Department of Atmospheric Sciences, National Taiwan University. The workshop focuses on studies of climate change, climate oscillations, typhoons, and convective-water cycling processes. The recent advances of theories, observations and high resolution modeling provide great opportunities for basic research on convection and water cycle and their interaction with weather and climate. But the complex nature of the relevant scientific issues and the huge amount of data pose great challenges for synthesizing all information to make breakthroughs in such studies. You are invited to participate the workshop to share your recent research results and to jointly synthesize outstanding research issues to promote communications and collaborations.</p>'
         }
       },
-      template: '<base-content-card :title="title" :contentHtml="contentHtml">\
-                  <v-layout row-md column ma-0 px-2 py-3>\
-                    <v-flex fill-height px-1 mb-3 order-md1 order-sm2 order-xs2 flex1>\
-                      We opened the web page for the Workshop for Typhoon, cloud and climate study.\
-                    </v-flex>\
-                    <v-flex fill-height px-1 mb-3 order-md2 order-sm1 order-xs1 homeside>\
+      template: '<base-content-card :title="title">\
+                  <v-layout row-sm column ma-0 px-2 py-3>\
+                    <v-flex v-html="contentHtml" fill-height px-1 mb-3 order-sm1 order-xs2 flex1></v-flex>\
+                    <v-flex fill-height px-1 mb-3 order-sm2 order-xs1 homeside>\
                       <v-card class="ma-0 amber accent-2">\
                         <v-subheader>Important Dates</v-subheader>\
                         <v-container fluid class="px-3 pb-3 pt-0">\
@@ -166,9 +166,9 @@
           items: [{
             title: 'Home',
             to: '/#/home'
-          }, {
-            title: 'Agenda',
-            to: '/#/agenda'
+          // }, {
+          //   title: 'Agenda',
+          //   to: '/#/agenda'
           }, {
             title: 'Tour',
             to: '/#/tour'

@@ -7,6 +7,21 @@
   padding-bottom: 66px;
 }*/
 
+#oralWithPoster>div>label {
+  margin-left: 40px;
+  color: rgba(0,0,80,.87);
+  height: auto;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.indent {
+  margin-left: 42px;
+}
+
 .v-enter-active {
   transition: all .36s ease;
 }

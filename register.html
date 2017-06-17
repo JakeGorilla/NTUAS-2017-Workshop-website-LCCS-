@@ -39,7 +39,7 @@
               <v-container class="ma-0 px-3 py-0">
                 <v-layout ma-0 row-sm column>
                   <v-flex xs6 sm2 py-2>
-                    <v-select v-bind:items="nameTitles" v-model="nameTitle" label="title" single-line required auto class="my-0"></v-select>
+                    <v-select v-bind:items="nameTitles" v-model="nameTitle" label="title" single-line required class="my-0"></v-select>
                   </v-flex>
                   <v-flex xs12 sm5 py-2>
                     <v-text-field label="First Name" required class="my-0"></v-text-field>
@@ -62,25 +62,52 @@
             <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
-                  <v-checkbox v-model="joinTour"></v-checkbox>
+                  <v-checkbox v-model="hotel"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>Join the tour</v-list-tile-title>
-                  <v-list-tile-sub-title>8/24, time TBD</v-list-tile-sub-title>
+                  <v-list-tile-title>代訂住宿</v-list-tile-title>
+                  <v-list-tile-sub-title>住多久</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
+            <v-layout v-if="hotel" mx-0 column row-sm wrap>
+              <v-flex offset-sm1>
+                <v-menu v-model="hotelStartMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
+                  <v-text-field label="Check-in" v-model="hotelStartDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                  <v-date-picker v-model="hotelStartDate" no-title scrollable actions dark></v-date-picker>
+                </v-menu>
+              </v-flex>
+              <v-flex flex>
+                <v-menu v-model="hotelEndMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
+                  <v-text-field label="Check-out" v-model="hotelEndDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                  <v-date-picker v-model="hotelEndDate" no-title scrollable actions dark></v-date-picker>
+                </v-menu>
+              </v-flex>
+            </v-layout>
             <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
                   <v-checkbox v-model="doOral"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>Oral</v-list-tile-title>
+                  <v-list-tile-title>Oral Presentation</v-list-tile-title>
                   <v-list-tile-sub-title>Submit details below</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
+            <div v-if="doOral" id="oralWithPoster" class="indent">
+              <v-checkbox v-model="oralWithPoster" label=" With a poster about same topic"></v-checkbox>
+            </div>
+            <!--<v-list-item v-if="doOral">
+              <v-list-tile avatar tag="div" class="indent">
+                <v-list-tile-action>
+                  <v-checkbox v-model="oralWithPoster" label="With a poster of same topic"></v-checkbox>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>└─ With a poster of same topic</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-item>-->
             <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
@@ -95,28 +122,14 @@
             <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
-                  <v-checkbox v-model="hotel"></v-checkbox>
+                  <v-checkbox v-model="joinTour"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>代訂住宿</v-list-tile-title>
-                  <v-list-tile-sub-title>住多久</v-list-tile-sub-title>
+                  <v-list-tile-title>Join the Field-trip</v-list-tile-title>
+                  <v-list-tile-sub-title>8/23, after noon</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
-            <v-layout v-if="hotel" mx-0 column row-sm wrap>
-              <v-flex offset-sm1>
-                <v-menu v-model="hotelStartMenu" lazy :close-on-content-click="false" transition="v-scale-transition" offset-y :nudge-left="40" top>
-                  <v-text-field label="From" v-model="hotelStartDate" slot="activator" prepend-icon="event" readonly></v-text-field>
-                  <v-date-picker v-model="hotelStartDate" no-title scrollable actions dark></v-date-picker>
-                </v-menu>
-              </v-flex>
-              <v-flex flex>
-                <v-menu v-model="hotelEndMenu" lazy :close-on-content-click="false" transition="v-scale-transition" offset-y :nudge-left="40">
-                  <v-text-field label="To" v-model="hotelEndDate" slot="activator" prepend-icon="event" readonly></v-text-field>
-                  <v-date-picker v-model="hotelEndDate" no-title scrollable actions dark></v-date-picker>
-                </v-menu>
-              </v-flex>
-            </v-layout>
           </v-list>
           <transition-group>
             <div v-if="doOral" key="oral">
@@ -125,6 +138,7 @@
                 <div class="subheader subheader--dark">Oral Presentation Information</div>
                 <v-container class="ma-0 px-3 py-0">
                   <v-text-field label="Title" v-model="oralTitle" required></v-text-field>
+                  <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" single-line required class="my-0"></v-select>
                   <v-text-field label="Abstract" v-model="oralAbs" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
                 </v-container>
               </v-container>
@@ -152,8 +166,9 @@
         return {
           title: 'Register',
           nameTitle: '',
-          nameTitles: ['Mr.','Ms.'],
+          nameTitles: ['Mr.', 'Ms.', 'Dr.', 'Prof.'],
           doOral: false,
+          oralWithPoster: true,
           doPoster: false,
           joinTour: true,
           hotel: false,
@@ -162,11 +177,13 @@
           hotelEndMenu: false,
           hotelEndDate: null,
           oralTitle: '',
+          timeOptions: ['5 mins','15 mins'],
+          oralTime: null,
           oralAbs: '',
-          hintOralAbs: '300~500 words, you can submit abstract by sending email later',
+          hintOralAbs: '300~500 words, you can submit abstract later by sending email',
           posterTitle: '',
           posterAbs: '',
-          hintPosterAbs: '300~500 words, you can submit abstract by sending email later'
+          hintPosterAbs: '300~500 words, you can submit abstract later by sending email'
         }
       },
       methods: {
