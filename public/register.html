@@ -42,16 +42,16 @@
                     <v-select v-bind:items="nameTitles" v-model="nameTitle" label="title" single-line required class="my-0"></v-select>
                   </v-flex>
                   <v-flex xs12 sm5 py-2>
-                    <v-text-field label="First Name" required class="my-0"></v-text-field>
+                    <v-text-field label="First Name" v-model="nameFirst" required class="my-0"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm5 py-2>
-                    <v-text-field label="Last Name" required class="my-0"></v-text-field>
+                    <v-text-field label="Last Name" v-model="nameLast" required class="my-0"></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-flex xs12>
-                  <v-text-field label="Email" required type="email"></v-text-field>
-                  <v-text-field label="Affiliation" required></v-text-field>
-                  <v-text-field label="Job Title" required></v-text-field>
+                  <v-text-field label="Email" v-model="email" required type="email"></v-text-field>
+                  <v-text-field label="Affiliation" v-model="affiliation" required></v-text-field>
+                  <v-text-field label="Job Title" v-model="job" required></v-text-field>
                 </v-flex>
               </v-container>
             </v-container>
@@ -150,6 +150,34 @@
           <v-card-row height="56" class="grey lighten-4 mt-3"></v-card-row>
         </v-card>
       </v-flex>
+      <v-dialog v-model="showDialog" persistent>
+        <v-btn primary light slot="activator">Open Dialog</v-btn>
+        <v-card>
+          <div v-if="loading">
+            <v-card-row>
+              <v-card-title>
+                Wait a second...
+              </v-card-title>
+            </v-card-row>
+            <v-progress-linear :indeterminate="true" :height="5" class="mt-0"></v-progress-linear>
+            <v-card-row>
+              <v-card-text>Connecting to the server</v-card-text>
+            </v-card-row>
+          </div>
+          <div v-if="submitted">
+            <v-card-row>
+              <v-card-title>a</v-card-title>
+            </v-card-row>
+            <v-card-row>
+              <v-card-text>b</v-card-text>
+            </v-card-row>
+            <v-card-row actions>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Disagree</v-btn>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Agree</v-btn>
+            </v-card-row>
+          </div>
+        </v-card>
+      </v-dialog>
     </v-layout>
   </v-app>
   <script>
@@ -160,20 +188,27 @@
           pageTitle: 'Register',
           nameTitle: '',
           nameTitles: ['Mr.', 'Ms.', 'Dr.', 'Prof.'],
-          doOral: false,
-          oralWithPoster: true,
-          doPoster: false,
-          joinTour: true,
+          nameFirst: '',
+          nameLast: '',
+          email: '',
+          affiliation: '',
+          job: '',
           hotel: false,
           hotelStartMenu: false,
           hotelStartDate: null,
           hotelEndMenu: false,
           hotelEndDate: null,
+          doOral: false,
+          oralWithPoster: true,
+          doPoster: false,
+          joinTour: true,
           title: '',
           abstract: '',
           oralTime: null,
           hintOralAbs: '300~500 words, you can submit abstract later by sending email',
-          hintPosterAbs: '300~500 words, you can submit abstract later by sending email'
+          hintPosterAbs: '300~500 words, you can submit abstract later by sending email',
+          loading: false,
+          submitted: false,
         }
       },
       computed: {
@@ -182,6 +217,29 @@
         },
         talkTimeHint: function () {
           return this.oralWithPoster ? '' : 'Without a poster, we hope you can provide a 15min talk'
+        },
+        submitData: function () {
+          return {
+            nameTitle: this.nameTitle,
+            nameFirst: this.nameFirst,
+            nameLast: this.nameLast,
+            email: this.email,
+            affiliation: this.affiliation,
+            job: this.job,
+            hotel: this.hotel,
+            hotelStartDate: this.hotelStartDate,
+            hotelEndDate: this.hotelEndDate,
+            doOral: this.doOral,
+            oralWithPoster: this.oralWithPoster,
+            doPoster: this.doPoster,
+            joinTour: this.joinTour,
+            title: this.title,
+            abstract: this.abstract,
+            oralTime: this.oralTime,
+          }
+        },
+        showDialog: function () {
+          return this.loading || this.submitted;
         }
       },
       watch: {
@@ -193,11 +251,16 @@
       },
       methods: {
         submit: function () {
-          console.log('placeholder')
+          console.log('Not yet initialized')
         }
       }
     })
   </script>
+  <script src="/__/firebase/4.1.2/firebase-app.js"></script>
+  <script src="/__/firebase/4.1.2/firebase-auth.js"></script>
+  <script src="/__/firebase/4.1.2/firebase-database.js"></script>
+  <script src="/__/firebase/init.js"></script>
+  <script src="register.js"></script>
 </body>
 
 </html>

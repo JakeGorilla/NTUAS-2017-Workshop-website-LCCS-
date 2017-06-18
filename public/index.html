@@ -87,8 +87,11 @@
                       <v-card class="ma-0 amber accent-2">\
                         <v-subheader>Important Dates</v-subheader>\
                         <v-container fluid class="px-3 pb-3 pt-0">\
+                          <span class="body-2">Jun 26, 2017</span><br>\
                           Registration Deadline<br>\
-                          Aug 22, 2017<br>\
+                          <v-divider class="my-3"></v-divider>\
+                          <span class="body-2">Jun 30, 2017</span><br>\
+                          Presentation Schedule Announcement<br>\
                         </v-container>\
                       </v-card>\
                     </v-flex>\
@@ -109,7 +112,7 @@
     var gis = {
       data: function () {
         return {
-          title: 'Exhibition Information',
+          title: 'Venue Information',
         }
       },
       template: '<base-content-card :title="title">\
@@ -142,10 +145,11 @@
                         <li>Website: <a href="https://ntudorm.prince.com.tw/Institute_List.aspx" target="_blank">https://ntudorm.prince.com.tw/Institute_List.aspx</a></li>\
                         <li>\
                           Location: No.16-2,16-3,16-5, Siyuan St., Zhongzheng Dist., Taipei City 100, Taiwan R.O.C.<br>\
-                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d639.1580117648374!2d121.53626788905666!3d25.01289894911737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x14314d44f9359f90!2z5o2357Wy5peF6Ie65aSn5bCK6LOi6aSoIEp1c3QgU2xlZXAgQCBOVFU!5e0!3m2!1szh-TW!2stw!4v1497729035288" frameborder="0" class="map" allowfullscreen></iframe>\
+                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d451.9485682499858!2d121.52991961079162!3d25.01409338084417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xf562675656e12d05!2z6Ie65aSn5L-u6b2K5pyD6aSo!5e0!3m2!1szh-TW!2stw!4v1497729132440" frameborder="0" class="map" allowfullscreen></iframe>\
                         </li>\
                       </ul>\
                     </div>\
+                    <v-divider class="my-4"></v-divider>\
                     <div class="pb-3">\
                       <h6 class="title">Just Sleep @ NTU</h6>\
                       <img src="gis.jpg" class="main-img">\
@@ -153,7 +157,7 @@
                         <li>Website: <a href="http://www.justsleep.com.tw/main/en" target="_blank">http://www.justsleep.com.tw/main/en</a></li>\
                         <li>\
                           Location: No. 83, Sec. 4, Roosevelt Rd., Taipei 10673, Taiwan<br>\
-                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d451.9485682499858!2d121.52991961079162!3d25.01409338084417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xf562675656e12d05!2z6Ie65aSn5L-u6b2K5pyD6aSo!5e0!3m2!1szh-TW!2stw!4v1497729132440" frameborder="0" class="map" allowfullscreen></iframe>\
+                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d639.1580117648374!2d121.53626788905666!3d25.01289894911737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x14314d44f9359f90!2z5o2357Wy5peF6Ie65aSn5bCK6LOi6aSoIEp1c3QgU2xlZXAgQCBOVFU!5e0!3m2!1szh-TW!2stw!4v1497729035288" frameborder="0" class="map" allowfullscreen></iframe>\
                         </li>\
                       </ul>\
                     </div>\
@@ -236,7 +240,7 @@
       }, {
         path: '/registration',
         component: registration
-      }, ]
+      },]
     })
 
     var app = new Vue({
@@ -248,10 +252,10 @@
             title: 'Home',
             to: '/#/home'
           }, {
-            //   title: 'Agenda',
-            //   to: '/#/agenda'
-            // }, {
-            title: 'Exhibition',
+              title: 'Agenda',
+              to: '/#/agenda'
+            }, {
+            title: 'Venue',
             to: '/#/gis'
           }, {
             title: 'Hotel',

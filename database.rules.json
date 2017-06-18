@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "reg": {
+      ".read": "false",
+      ".write": "true",
+      "$id": {
+        ".read": "true",
+        ".validate": "!data.exists() || newData.hasChildren(['nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
+        }
+      }
+    }
+  }
+}
