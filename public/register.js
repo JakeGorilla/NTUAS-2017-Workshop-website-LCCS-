@@ -42,6 +42,10 @@ app.submit = function () {
     if (error) {
       console.log(updateData)
       me.wait = false
+      me.error = true
+      setTimeout(function() {
+        me.error = false
+      }, 5000);
     } else {
       me.id = id
       me.key = key

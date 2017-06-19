@@ -23,6 +23,7 @@
   <v-app id="app" class="blue lighten-4">
     <v-layout justify-center>
       <v-flex fill-height xs12 sm11 md10 lg9>
+        <v-alert error class="ma-0 elevation-1" v-model="error" dismissible>Network or server error</v-alert>
         <v-card id="main">
           <v-card-row>
             <v-toolbar light>
@@ -240,7 +241,8 @@
           submitted: false,
           id: '',
           key: '',
-          askId: false
+          askId: false,
+          error: false
         }
       },
       computed: {
