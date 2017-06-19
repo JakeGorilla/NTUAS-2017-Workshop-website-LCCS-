@@ -14,25 +14,26 @@ function hash(str) {
   return parseInt(hash.toString().slice(hashA.length + 1)).toString()
 }
 
-function genId() {
-  id = hash(regRef.push().key)
-  regRef.child(id).set(1).then(function () {
-    return id
-  }).catch(function () {
-    return null
-  });
-}
+// function genId() {
+//   id = hash(regRef.push().key)
+//   // regRef.child(id).set(1).then(function () {
+//   //   return id
+//   // }).catch(function () {
+//   //   return null
+//   // });
+//   return id
+// }
 
-var submit = function () {
-  var id = null
-  while (!id) {
-    id = genId()
-  }
-  return id
-  // regRef.set(this.submitData).then(function () { })
-}
-var data=''
-for (var index = 0; index < 10000; index++) {
-  data=data+submit+'<br>'
-}
-document.body.innerHTML=data
+// var submit = function () {
+//   var id = null
+//   while (!id) {
+//     id = genId()
+//   }
+//   return id
+//   // regRef.set(this.submitData).then(function () { })
+// }
+// var data=''
+// for (var index = 0; index < 100000; index++) {
+//   data=data+genId()+'<br>'
+// }
+// document.body.innerHTML=data

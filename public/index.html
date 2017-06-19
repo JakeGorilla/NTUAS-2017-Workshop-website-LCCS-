@@ -103,7 +103,7 @@
       data: function () {
         return {
           title: 'Agenda',
-          contentHtml: '8/22, 8/23  workshop<br>8/24  tour'
+          contentHtml: '<div class="my-2"></div><p><span>8/22 Tuesday</span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>8:30 – 10:00 <span>&nbsp; </span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Opening  and Oral presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>10:00 – 10:30 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Tea  Time </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>10:30 – 12:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Poster  presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>12:00 – 13:30 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Lunch  time </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>13:30 – 15:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Oral  presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>15:00 – 15:30 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Tea  Time </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>15:30 – 17:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Poster  presentation </span></p><p><span><o:p>&nbsp;</o:p></span></p><p><span>8/23 Tuesday</span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>8:30 – 10:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Opening  and Oral presentation</span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>10:00 – 10:30<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Tea  Time </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>10:30 – 12:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Poster  presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>12:00 – 13:30 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Lunch  time </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>13:30 – 15:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Oral  presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>15:00 – 15:30 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Tea  Time </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>15:30 – 17:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Poster  presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>18:00 – 20:00<span>&nbsp; </span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>banquet</span></p><p><span><o:p>&nbsp;</o:p></span></p><p><span>8/24 Thursday</span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>8:30 – 10:00 <span>&nbsp; </span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Opening  and Oral presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>10:00 – 11:30 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Poster  presentation </span></p><p><span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>11:30 – 12:00 <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Closing</span></p>'
         }
       },
       template: '<base-content-card :title="title" :contentHtml="contentHtml"></base-content-card>'
@@ -196,7 +196,6 @@
       data: function () {
         return {
           title: 'Registration',
-          contentHtml: '',
           link: 'register.html'
         }
       },
@@ -207,9 +206,19 @@
         }
       },
       template: '\
-        <base-content-card :title="title" :contentHtml="contentHtml">\
+        <base-content-card :title="title">\
           <v-container fluid class="ma-0 pa-3">\
-            attend please, Here is some information...<br>Hotel...<br>tour...<br><br><br>\
+            <div class="body-2">Notification:</div>\
+            <ol id="regnof" type="1" class="mt-2 mb-4">\
+              <li>Here is for all participants to register. Please submit your abstract and title for presentation. If abstract is not available, please fill in your title at least. This help us to arrange our schedule as soon as possible. You can submit(modify) your abstract later by sending email to lccs@gmail.com (by logging into this website with your email and password).</li>\
+              <li>Students and younger scientist are recommended to give both oral and poster. There are 2 options for your oral presentation, 5 mins and 15 mins. If you prefer 5-min talk, a poster is recommended for later discussion.</li>\
+              <li>The results of report form may be some different from your submission due to the consideration of time and the space. We are trying our best to fit your preference.</li>\
+              <li>Please register before 8/23. If having any problem, please mail to lccs@gmail.com.</li>\
+              <li>Tour is mainly prepared for foreign participants. If seats are still available, Taiwanese participants are also allowed to participate. The Detail of tour will be announced later.</li>\
+              <li>Lodgment information had been acquired some days ago, but repetitive acquirement here is to check it out and ask for more detail information.</li>\
+              <li>If we miss some important information, please let me know in the option, special requirements and suggestions.</li>\
+              <li>Thank you for your registration.</li>\
+            </ol>\
             <v-btn primary light exact tag="a" :href="link">Go Registration</v-btn>\
           </v-container>\
         </base-content-card>'
@@ -252,9 +261,9 @@
             title: 'Home',
             to: '/#/home'
           }, {
-              title: 'Agenda',
-              to: '/#/agenda'
-            }, {
+            title: 'Agenda',
+            to: '/#/agenda'
+          }, {
             title: 'Venue',
             to: '/#/gis'
           }, {

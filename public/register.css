@@ -7,12 +7,25 @@
   padding-bottom: 66px;
 }*/
 
+@media (min-width: 600px) {
+  .hotel-time {
+    display: inline-block;
+  }
+
+  .hotel-time .input-group {
+    max-width: 45%;
+  }
+
+  .description {
+    max-width: 70%;
+  }
+}
+
 .hotel-time .input-group {
-  max-width: 100%;
   min-width: 222px;
 }
 
-#oralWithPoster>div>label {
+#oralWithPoster > div > label {
   margin-left: 40px;
   color: rgba(0, 0, 0, .87);
   height: auto;

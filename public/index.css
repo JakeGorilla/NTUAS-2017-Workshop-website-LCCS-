@@ -67,6 +67,9 @@ main {
   opacity: 0;
 }
 
+#regnof li{
+  margin-bottom: 8px;
+}
 
 /*.dialog--fullscreen .toolbar .btn:last-child {
   margin: initial !important;

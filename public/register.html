@@ -65,23 +65,31 @@
                   <v-checkbox v-model="hotel"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>代訂住宿</v-list-tile-title>
-                  <v-list-tile-sub-title>住多久</v-list-tile-sub-title>
+                  <v-list-tile-title>Lodgment</v-list-tile-title>
+                  <v-list-tile-sub-title>This has been inquired some days ago, but just check it out again</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
-            <v-layout v-if="hotel" mx-0 column row-sm wrap>
-              <v-flex offset-sm1 hotel-time>
-                <v-menu v-model="hotelStartMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
-                  <v-text-field label="Check-in" v-model="hotelStartDate" slot="activator" prepend-icon="event" readonly></v-text-field>
-                  <v-date-picker v-model="hotelStartDate" no-title scrollable actions dark></v-date-picker>
-                </v-menu>
-              </v-flex>
-              <v-flex flex hotel-time>
-                <v-menu v-model="hotelEndMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
-                  <v-text-field label="Check-out" v-model="hotelEndDate" slot="activator" prepend-icon="event" readonly></v-text-field>
-                  <v-date-picker v-model="hotelEndDate" no-title scrollable actions dark></v-date-picker>
-                </v-menu>
+            <v-list-item v-if="hotel">
+              <v-list-tile avatar tag="div">
+                <v-list-tile-action></v-list-tile-action>
+                <v-select v-bind:items="hotelOptions" v-model="hotelOption" label="Prefered hotel" single-line required class="mr-2"></v-select>
+              </v-list-tile>
+            </v-list-item>
+            <v-layout v-if="hotel" mx-0>
+              <v-flex offset-xs1>
+                <div class="hotel-time">
+                  <v-menu v-model="hotelStartMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
+                    <v-text-field label="Check-in" v-model="hotelStartDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                    <v-date-picker v-model="hotelStartDate" no-title scrollable actions dark></v-date-picker>
+                  </v-menu>
+                </div>
+                <div class="hotel-time">
+                  <v-menu v-model="hotelEndMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
+                    <v-text-field label="Check-out" v-model="hotelEndDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                    <v-date-picker v-model="hotelEndDate" no-title scrollable actions dark></v-date-picker>
+                  </v-menu>
+                </div>
               </v-flex>
             </v-layout>
             <v-list-item>
@@ -97,7 +105,7 @@
             </v-list-item>
             <transition-group name="vertical" id="posterOption" tag="div">
               <div v-if="doOral" id="oralWithPoster" class="indent" key="withOral">
-                <v-checkbox v-model="oralWithPoster" label=" With a poster about same topic"></v-checkbox>
+                <v-checkbox v-model="oralWithPoster" label=" I will have a poster with the same title"></v-checkbox>
               </div>
               <v-list-item v-if="!doOral" key="noOral">
                 <v-list-tile avatar tag="div">
@@ -117,41 +125,43 @@
                   <v-checkbox v-model="joinTour"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>Join the Field-trip</v-list-tile-title>
-                  <v-list-tile-sub-title>8/23, after noon</v-list-tile-sub-title>
+                  <v-list-tile-title>Join the Field trip</v-list-tile-title>
+                  <v-list-tile-sub-title>It's going to be held in the afternoon, 8/23. Details will be announced later.</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
           </v-list>
-          <transition-group>
-            <div v-if="doOral" key="oral">
-              <v-divider></v-divider>
-              <v-container class="ma-0 pa-0">
-                <div class="subheader subheader--dark">Oral Presentation Information</div>
-                <v-container class="ma-0 px-3 py-0">
-                  <v-text-field label="Title" v-model="title" required></v-text-field>
-                  <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" :hint="talkTimeHint" :persistent-hint="!oralWithPoster"
-                    single-line required class="my-0"></v-select>
-                  <v-text-field label="Abstract" v-model="abstract" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
-                </v-container>
+          <!--<transition-group>-->
+          <div v-if="doOral" key="oral">
+            <v-divider></v-divider>
+            <v-container class="ma-0 pa-0">
+              <div class="subheader subheader--dark">Oral Presentation Information</div>
+              <v-container class="ma-0 px-3 py-0">
+                <div class="description ml-3 mb-4">Please fill in the title and abstract of your work and select the length of your talk as you prefer. (Title
+                  is necessary for our work, abstract can be uploaded(modified) later by mailing to lccs@gmail.com (by logging
+                  here with your email and password which you can decide below) </div>
+                <v-text-field label="Title" v-model="title" required></v-text-field>
+                <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" :hint="talkTimeHint" :persistent-hint="!oralWithPoster"
+                  single-line required class="my-0"></v-select>
+                <v-text-field label="Abstract" v-model="abstract" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
               </v-container>
-            </div>
-            <div v-if="doPoster" key="poster">
-              <v-divider></v-divider>
-              <v-container class="ma-0 pa-0">
-                <div class="subheader subheader--dark">Poster Information</div>
-                <v-container class="ma-0 px-3 py-0">
-                  <v-text-field label="Title" v-model="title" required></v-text-field>
-                  <v-text-field label="Abstract" v-model="abstract" :hint="hintPosterAbs" persistent-hint counter max="500" multi-line></v-text-field>
-                </v-container>
+            </v-container>
+          </div>
+          <div v-if="doPoster" key="poster">
+            <v-divider></v-divider>
+            <v-container class="ma-0 pa-0">
+              <div class="subheader subheader--dark">Poster Information</div>
+              <v-container class="ma-0 px-3 py-0">
+                <v-text-field label="Title" v-model="title" required></v-text-field>
+                <v-text-field label="Abstract" v-model="abstract" :hint="hintPosterAbs" persistent-hint counter max="500" multi-line></v-text-field>
               </v-container>
-            </div>
-          </transition-group>
+            </v-container>
+          </div>
+          <!--</transition-group>-->
           <v-card-row height="56" class="grey lighten-4 mt-3"></v-card-row>
         </v-card>
       </v-flex>
       <v-dialog v-model="showDialog" persistent>
-        <v-btn primary light slot="activator">Open Dialog</v-btn>
         <v-card>
           <div v-if="loading">
             <v-card-row>
@@ -194,6 +204,8 @@
           affiliation: '',
           job: '',
           hotel: false,
+          hotelOption: null,
+          hotelOptions: ['Just Sleep', 'Hsiu-Chi House'],
           hotelStartMenu: false,
           hotelStartDate: null,
           hotelEndMenu: false,
@@ -213,10 +225,11 @@
       },
       computed: {
         timeOptions: function () {
-          return this.oralWithPoster ? ['Talk 5 mins', 'Talk 15 mins'] : ['Talk 15 mins']
+          return ['Talk 5 mins', 'Talk 15 mins']
+          // return this.oralWithPoster ? ['Talk 5 mins', 'Talk 15 mins'] : ['Talk 15 mins']
         },
         talkTimeHint: function () {
-          return this.oralWithPoster ? '' : 'Without a poster, we hope you can provide a 15min talk'
+          return this.oralWithPoster ? '' : 'If you don\'t have a poster, we recommend providing a 15min talk.'
         },
         submitData: function () {
           return {
@@ -227,6 +240,7 @@
             affiliation: this.affiliation,
             job: this.job,
             hotel: this.hotel,
+            hotelOption: this.hotelOption,
             hotelStartDate: this.hotelStartDate,
             hotelEndDate: this.hotelEndDate,
             doOral: this.doOral,
