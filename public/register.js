@@ -1,5 +1,9 @@
 var database = firebase.database()
-var regRef = database.ref('/reg');
+var regPath = 'reg'
+var editPath = 'edit'
+var regRef = database.ref(regPath);
+var editRef = database.ref(editPath);
+
 function hash(str) {
   var hash = 0, len = str.length;
   if (str.length === 0) {
@@ -10,30 +14,39 @@ function hash(str) {
     hash = hash + charC * Math.pow(0.7, i) * Math.pow(2, len - i);
     //hash = hash & hash; // Convert to 32bit integer
   }
-  hashA = parseInt(hash).toString()
-  return parseInt(hash.toString().slice(hashA.length + 1)).toString()
+  var head = (str.match(/.*([A-Za-z])/))[1] //.toUpperCase()
+  var hashA = parseInt(hash).toString()
+  return head + parseInt(hash.toString().slice(hashA.length + 1)).toString()
 }
 
-// function genId() {
-//   id = hash(regRef.push().key)
-//   // regRef.child(id).set(1).then(function () {
-//   //   return id
-//   // }).catch(function () {
-//   //   return null
-//   // });
-//   return id
-// }
+app.submit = function () {
+  this.wait = true
+  var key, id
+  if (!this.id) {
+    key = database.ref(regPath).push().key
+    id = hash(key)
+  } else if (!this.key) {
+    // ERROR: make user reload form from server
+  } else {
+    key = this.key
+    id = this.id
+  }
+  var updateData = {}
+  updateData[regPath + '/' + key] = this.submitData
+  updateData[regPath + '/' + key]['id'] = id
+  updateData[editPath + '/' + id] = this.submitData
+  updateData[editPath + '/' + id]['key'] = key
 
-// var submit = function () {
-//   var id = null
-//   while (!id) {
-//     id = genId()
-//   }
-//   return id
-//   // regRef.set(this.submitData).then(function () { })
-// }
-// var data=''
-// for (var index = 0; index < 100000; index++) {
-//   data=data+genId()+'<br>'
-// }
-// document.body.innerHTML=data
+  var me = this
+  database.ref().update(updateData, function (error) {
+    if (error) {
+      console.log(updateData)
+      me.wait = false
+    } else {
+      me.id = id
+      me.key = key
+      me.wait = false
+      me.submitted = true
+    }
+  })
+}

@@ -13,8 +13,54 @@
 </head>
 
 <body>
+    <div id="s" style="padding:24px;font-size:20px;"></div>
     <script src="register.js"></script>
-
+    <!--<script>
+        // var total = 0
+        // var collisions = 0
+        // function test() {
+            var count = 0
+            var data = []
+            var c = []
+            setInterval(function () {
+                var flag = true
+                // while (flag) { }
+                var id = hash(regRef.push().key)
+                // console.log(id)
+                if (data.indexOf(id) == -1) {
+                    data.push(hash(regRef.push().key))
+                }
+                else {
+                    c.push(id)
+                }
+            }, 1)
+        // }
+        document.querySelector('#s').innerHTML = collisions + ' collisions in ' + total
+    </script>-->
+    <script>
+        var count = 0
+        var data = []
+        var c = []
+        var x = []
+        var y = []
+        var a = setInterval(function () {
+            var id = hash(regRef.push().key)
+            // console.log(id)
+            if (data.indexOf(id) == -1) {
+                data.push(hash(regRef.push().key))
+            }
+            else {
+                c.push(id)
+                x.push(count)
+                y.push(c.length)
+            }
+            count++
+            // if (count % 10 === 0) {
+            document.querySelector('#s').innerHTML = c.length + ' collisions in ' + count
+            // }
+            if (count === 100000) { clearInterval(a) }
+        }, 5000)
+    </script>
 </body>
 
 </html>

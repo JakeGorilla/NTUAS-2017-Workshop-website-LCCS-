@@ -1,15 +1,28 @@
 {
   "rules": {
+    ".write": "true",
     "reg": {
       ".read": "false",
-      ".write": "true",
       "$id": {
-        ".read": "true",
-        ".validate": "!data.exists() || newData.hasChildren(['nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime'])",
+        ".validate": "newData.hasChildren(['nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime'])",
         "email": {
           ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
         }
       }
+    },
+    "edit": {
+      ".read": "false",
+      ".write": "true",
+      "$id": {
+        ".read": "true",
+        ".validate": "newData.hasChildren(['nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
+        }
+      }
+    },
+    "$else": {
+      ".validate": "false"
     }
   }
 }

@@ -30,7 +30,8 @@
                 <v-icon>arrow_back</v-icon>
               </v-btn>
               <v-toolbar-title v-text="pageTitle"></v-toolbar-title>
-              <v-btn light flat @click.native="submit">Submit</v-btn>
+              <v-btn light flat @click.native="askId=true">Load</v-btn>
+              <v-btn light outline @click.native="submit">Submit</v-btn>
             </v-toolbar>
           </v-card-row>
           <div>
@@ -161,29 +162,45 @@
           <v-card-row height="56" class="grey lighten-4 mt-3"></v-card-row>
         </v-card>
       </v-flex>
-      <v-dialog v-model="showDialog" persistent>
+      <v-dialog v-model="showDialog" width="340" persistent>
         <v-card>
-          <div v-if="loading">
+          <div v-if="wait">
             <v-card-row>
               <v-card-title>
-                Wait a second...
+                Wait a second
               </v-card-title>
             </v-card-row>
             <v-progress-linear :indeterminate="true" :height="5" class="mt-0"></v-progress-linear>
             <v-card-row>
-              <v-card-text>Connecting to the server</v-card-text>
+              <v-card-text>Sending data to the server...</v-card-text>
             </v-card-row>
           </div>
           <div v-if="submitted">
             <v-card-row>
-              <v-card-title>a</v-card-title>
+              <v-card-title>Registration submitted</v-card-title>
             </v-card-row>
             <v-card-row>
-              <v-card-text>b</v-card-text>
+              <v-card-text>
+                Please remember your code (<b>case sensitive</b>):
+                <div class="display-1 red--text amber lighten-4">{{id}}</div>
+              </v-card-text>
             </v-card-row>
             <v-card-row actions>
-              <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Disagree</v-btn>
-              <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Agree</v-btn>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="submitted=false">Close</v-btn>
+            </v-card-row>
+          </div>
+          <div v-if="askId">
+            <v-card-row>
+              <v-card-title>Input your ID</v-card-title>
+            </v-card-row>
+            <v-card-row>
+              <v-card-text>
+                <v-text-field label="id" v-model="id" required></v-text-field>
+              </v-card-text>
+            </v-card-row>
+            <v-card-row actions>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="askId=false">Cancel</v-btn>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="loadFromServer">Load</v-btn>
             </v-card-row>
           </div>
         </v-card>
@@ -204,23 +221,26 @@
           affiliation: '',
           job: '',
           hotel: false,
-          hotelOption: null,
+          hotelOption: '',
           hotelOptions: ['Just Sleep', 'Hsiu-Chi House'],
           hotelStartMenu: false,
-          hotelStartDate: null,
+          hotelStartDate: '',
           hotelEndMenu: false,
-          hotelEndDate: null,
+          hotelEndDate: '',
           doOral: false,
           oralWithPoster: true,
           doPoster: false,
           joinTour: true,
           title: '',
           abstract: '',
-          oralTime: null,
+          oralTime: '',
           hintOralAbs: '300~500 words, you can submit abstract later by sending email',
           hintPosterAbs: '300~500 words, you can submit abstract later by sending email',
-          loading: false,
+          wait: false,
           submitted: false,
+          id: '',
+          key: '',
+          askId: false
         }
       },
       computed: {
@@ -253,18 +273,21 @@
           }
         },
         showDialog: function () {
-          return this.loading || this.submitted;
+          return this.wait || this.submitted || this.askId;
         }
       },
       watch: {
         oralWithPoster: function () {
           if (this.oralTime && !this.timeOptions.includes(this.oralTime)) {
-            this.oralTime = null
+            this.oralTime = ''
           }
         }
       },
       methods: {
         submit: function () {
+          console.log('Not yet initialized')
+        },
+        loadFromServer: function () {
           console.log('Not yet initialized')
         }
       }
