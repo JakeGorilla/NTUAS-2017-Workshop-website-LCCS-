@@ -39,8 +39,10 @@ app.submit = function () {
   var updateData = {}
   updateData[regPath + key] = Object.assign({}, this.submitData)
   updateData[regPath + key]['id'] = id
+  updateData[regPath + key]['timestamp'] = firebase.database.ServerValue.TIMESTAMP
   updateData[editPath + id] = Object.assign({}, this.submitData)
   updateData[editPath + id]['key'] = key
+  updateData[editPath + id]['timestamp'] = firebase.database.ServerValue.TIMESTAMP
 
   var me = this
   database.ref().update(updateData, function (error) {

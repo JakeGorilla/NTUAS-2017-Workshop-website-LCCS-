@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Submit Info</title>
+  <title>Submit Registration</title>
   <!-- Font library and icon pack -->
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
   <!-- for IE -->
@@ -31,7 +31,7 @@
               <v-btn icon="icon" @click.native="history.back()" light>
                 <v-icon>arrow_back</v-icon>
               </v-btn>
-              <v-toolbar-title v-text="pageTitle"></v-toolbar-title>
+              <v-toolbar-title>Registration</v-toolbar-title>
               <v-btn light flat @click.native="askId=true">Load</v-btn>
               <v-btn light outline @click.native="submit">Submit</v-btn>
             </v-toolbar>
@@ -233,7 +233,6 @@
       el: '#app',
       data: function () {
         return {
-          pageTitle: 'Registration',
           nameTitle: '',
           nameTitles: ['Mr.', 'Ms.', 'Dr.', 'Prof.'],
           nameFirst: '',
