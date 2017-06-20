@@ -24,7 +24,11 @@
 <body>
   <v-app id="app" class="grey lighten-3 app-width">
     <v-toolbar class="amber darken-1" light>
-      <v-toolbar-title><span class="black--text">Workshop for Typhoon, cloud and climate study</span></v-toolbar-title>
+      <v-toolbar-title class="hidden-xs-only"><span class="black--text">Workshop for Typhoon, cloud and climate study</span></v-toolbar-title>
+      <v-toolbar-title class="hidden-sm-and-up"><span class="black--text">Workshop</span></v-toolbar-title>
+      <v-toolbar-items>
+        <v-toolbar-item href="http://157.82.240.172/~vl/index-eng.html" target="_blank">Link</v-toolbar-item>
+      </v-toolbar-items>
     </v-toolbar>
     <main>
       <v-container fluid class="pt-1">
@@ -58,11 +62,19 @@
   <!-- main render -->
   <script>
     Vue.component('base-content-card', {
-      props: ['title', 'contentHtml'],
+      props: ['title', 'shortTitle', 'contentHtml'],
+      computed: {
+        sTitle: function () {
+          return this.shortTitle ? this.shortTitle : this.title
+        }
+      },
       template: '<v-card class="min-height v-slide-x-transition">\
                   <v-card-row class="grey darken-4" height="44px">\
-                    <v-card-title>\
+                    <v-card-title class="hidden-xs-only">\
                       <span class="white--text sec-title">{{ title }}</span>\
+                    </v-card-title>\
+                    <v-card-title class="hidden-sm-and-up">\
+                      <span class="white--text sec-title">{{ sTitle }}</span>\
                     </v-card-title>\
                   </v-card-row>\
                   <slot>\
@@ -83,6 +95,7 @@
       template: '<base-content-card :title="title">\
                   <v-layout row-sm column ma-0 pa-3>\
                     <v-flex v-html="contentHtml" pa-0 mb-3 order-sm1 order-xs2 flex1></v-flex>\
+                    <v-flex mx-1 my-0 pa-0 hidden-xs-only order-sm2 ></v-flex>\
                     <v-flex pa-0 mb-3 order-sm2 order-xs1 homeside>\
                       <v-card class="ma-0 amber accent-2">\
                         <v-subheader>Important Dates</v-subheader>\
@@ -175,9 +188,10 @@
       data: function () {
         return {
           title: 'Atmospheric Sciences Society, NTU',
+          shortTitle: 'NTUAS'
         }
       },
-      template: '<base-content-card :title="title">\
+      template: '<base-content-card :title="title" :shortTitle="shortTitle">\
                   <div class="pa-3">\
                     <img src="ntuas.jpg" class="main-img">\
                     <ul>\
