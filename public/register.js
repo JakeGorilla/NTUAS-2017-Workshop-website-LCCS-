@@ -20,6 +20,10 @@ function hash(str) {
 }
 
 app.submit = function () {
+  if(!this.checkData()){
+    this.notComplete = true
+    return
+  }
   this.wait = true
   var key, id, flag
   if (!this.id || !this.key) {
@@ -48,7 +52,7 @@ app.submit = function () {
       me.key = key
       me.wait = false
       if (flag) me.submitted = true
-      else me.info('Update successfully. 可繼續編輯並再次送出')
+      else me.info('Update successfully. You can continue editing and update it.')
     }
   })
 }

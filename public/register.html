@@ -183,12 +183,13 @@
           </div>
           <div v-if="submitted">
             <v-card-row>
-              <v-card-title>Registration submitted</v-card-title>
+              <v-card-title>Successful Regristration</v-card-title>
             </v-card-row>
             <v-card-row>
               <v-card-text>
                 Please remember your ID (<b>case sensitive</b>):
-                <div class="display-1 red--text amber lighten-4">{{id}}</div>
+                <div class="display-1 red--text amber lighten-4 mb-2">{{id}}</div>
+                You can use this ID to load the registration form and make modifications later.
               </v-card-text>
             </v-card-row>
             <v-card-row actions>
@@ -202,12 +203,25 @@
             <v-card-row>
               <v-card-text>
                 Don't change it if you are not tring to re-load data from server!
-                <v-text-field label="ID" v-model="id" required></v-text-field>
+                <v-text-field label="ID" v-model="id"></v-text-field>
               </v-card-text>
             </v-card-row>
             <v-card-row actions>
               <v-btn class="green--text darken-1" flat="flat" @click.native="askId=false">Cancel</v-btn>
               <v-btn class="green--text darken-1" flat="flat" @click.native="loadFromServer">Load</v-btn>
+            </v-card-row>
+          </div>
+          <div v-if="notComplete">
+            <v-card-row>
+              <v-card-title>Not Completed</v-card-title>
+            </v-card-row>
+            <v-card-row>
+              <v-card-text>
+                Please fill all needed fields (marks with *) and make sure they are correct before you submit.
+              </v-card-text>
+            </v-card-row>
+            <v-card-row actions>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="notComplete=false">OK</v-btn>
             </v-card-row>
           </div>
         </v-card>
@@ -251,7 +265,8 @@
           error: false,
           errorMsg: '',
           success: false,
-          successMsg: ''
+          successMsg: '',
+          notComplete: false
         }
       },
       computed: {
@@ -284,7 +299,7 @@
           }
         },
         showDialog: function () {
-          return this.wait || this.submitted || this.askId;
+          return this.wait || this.submitted || this.askId || this.notComplete;
         }
       },
       watch: {
@@ -295,6 +310,39 @@
         }
       },
       methods: {
+        checkData: function () {
+          if (!this.email || !this.email.match(/\w+@(?:\w+\.)\w+/)) {
+            // email not ok
+            console.log('email not ok')
+            return false
+          }
+          if (!(this.nameTitle && this.nameFirst && this.nameLast && this.affiliation && this.job)) {
+            console.log('presonal info not ok')
+            return false
+          }
+          if (this.hotel) {
+            // Lodging requested
+            if (!(this.hotelOption && this.hotelStartDate && this.hotelEndDate)) {
+              // Lodging info not ok
+              console.log('Lodging info not ok')
+              return false
+            }
+          }
+          if (this.doOral || this.doPoster) {
+            // need title at least
+            if (!(this.title)) {
+              console.log('Need presentation title')
+              return false
+            }
+          }
+          if (this.doOral) {
+            if (!this.oralTime) {
+              console.log('Select talk time')
+              return false
+            }
+          }
+          return true
+        },
         submit: function () {
           console.log('Not yet initialized')
         },
