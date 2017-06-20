@@ -1,8 +1,8 @@
 var database = firebase.database()
-var regPath = 'reg'
-var editPath = 'edit'
-var regRef = database.ref(regPath);
-var editRef = database.ref(editPath);
+var regPath = 'reg/'
+var editPath = 'edit/'
+// var regRef = database.ref(regPath);
+// var editRef = database.ref(editPath);
 
 function hash(str) {
   var hash = 0, len = str.length;
@@ -21,36 +21,62 @@ function hash(str) {
 
 app.submit = function () {
   this.wait = true
-  var key, id
-  if (!this.id) {
+  var key, id, flag
+  if (!this.id || !this.key) {
+    // Key is not exist because user tried to enter a wrong ID, so ignore that ID
     key = database.ref(regPath).push().key
     id = hash(key)
-  } else if (!this.key) {
-    // ERROR: make user reload form from server
+    flag = true // new submittion
   } else {
     key = this.key
     id = this.id
+    flag = false // update submittion
   }
   var updateData = {}
-  updateData[regPath + '/' + key] = this.submitData
-  updateData[regPath + '/' + key]['id'] = id
-  updateData[editPath + '/' + id] = this.submitData
-  updateData[editPath + '/' + id]['key'] = key
+  updateData[regPath + key] = Object.assign({}, this.submitData)
+  updateData[regPath + key]['id'] = id
+  updateData[editPath + id] = Object.assign({}, this.submitData)
+  updateData[editPath + id]['key'] = key
 
   var me = this
   database.ref().update(updateData, function (error) {
     if (error) {
       console.log(updateData)
-      me.wait = false
-      me.error = true
-      setTimeout(function() {
-        me.error = false
-      }, 5000);
+      me.alert(error.message.replace(/.*:/, error.name + ':'))
     } else {
       me.id = id
       me.key = key
       me.wait = false
-      me.submitted = true
+      if (flag) me.submitted = true
+      else me.info('Update successfully. 可繼續編輯並再次送出')
     }
+  })
+}
+
+app.loadFromServer = function () {
+  if (!this.id) {
+    // empty ID
+    return
+  }
+  // start retrieving
+  this.askId = false
+  this.wait = true
+  var me = this
+  database.ref(editPath + this.id).once('value').then(function (snap) {
+    if (!snap.exists()) {
+      // ID not found
+      me.alert('Error: ID not exist! Please check again.')
+      return
+    }
+    // ID OK
+    var data = snap.val()
+    if (data) {
+      console.log(data)
+      me.fillData(data)
+    }
+    me.wait = false
+    me.info('Submit successfully')
+  }).catch(function (error) {
+    me.alert(error.message.replace(/.*:/, error.name + ':'))
   })
 }

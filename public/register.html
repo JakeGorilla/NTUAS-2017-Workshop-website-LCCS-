@@ -23,7 +23,8 @@
   <v-app id="app" class="blue lighten-4">
     <v-layout justify-center>
       <v-flex fill-height xs12 sm11 md10 lg9>
-        <v-alert error class="ma-0 elevation-1" v-model="error" dismissible>Network or server error</v-alert>
+        <v-alert error class="ma-0 elevation-1" v-model="error" dismissible>{{ errorMsg }}</v-alert>
+        <v-alert success class="ma-0 elevation-1" v-model="success">{{ successMsg }}</v-alert>
         <v-card id="main">
           <v-card-row>
             <v-toolbar light>
@@ -60,15 +61,15 @@
           </div>
           <v-list three-line subheader>
             <v-divider></v-divider>
-            <v-subheader>Workshop from 12pm, 8/22 to 13pm, 8/24</v-subheader>
+            <v-subheader>Workshop from 8/22 8:30 am to 8/24 1pm</v-subheader>
             <v-list-item>
               <v-list-tile avatar tag="div">
                 <v-list-tile-action>
                   <v-checkbox v-model="hotel"></v-checkbox>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                  <v-list-tile-title>Lodgment</v-list-tile-title>
-                  <v-list-tile-sub-title>This has been inquired some days ago, but just check it out again</v-list-tile-sub-title>
+                  <v-list-tile-title>Lodging</v-list-tile-title>
+                  <v-list-tile-sub-title>Requested before for reservation purpose, please fill in it again</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list-item>
@@ -139,9 +140,10 @@
             <v-container class="ma-0 pa-0">
               <div class="subheader subheader--dark">Oral Presentation Information</div>
               <v-container class="ma-0 px-3 py-0">
-                <div class="description ml-3 mb-4">Please fill in the title and abstract of your work and select the length of your talk as you prefer. (Title
-                  is necessary for our work, abstract can be uploaded(modified) later by mailing to lccs@gmail.com (by logging
-                  here with your email and password which you can decide below) </div>
+                <div class="description ml-3 mb-4">Please fill in the title and abstract of your work and select the length of your talk as you prefer. Title
+                  is necessary for our work; abstract can be uploaded(modified) later by your ID obtaining after a successful
+                  registration.
+                </div>
                 <v-text-field label="Title" v-model="title" required></v-text-field>
                 <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" :hint="talkTimeHint" :persistent-hint="!oralWithPoster"
                   single-line required class="my-0"></v-select>
@@ -154,6 +156,9 @@
             <v-container class="ma-0 pa-0">
               <div class="subheader subheader--dark">Poster Information</div>
               <v-container class="ma-0 px-3 py-0">
+                <div class="description ml-3 mb-4">Please fill in the title and abstract of your work. Title is necessary for our work; abstract can be uploaded(modified)
+                  later by your ID obtaining after a successful registration.
+                </div>
                 <v-text-field label="Title" v-model="title" required></v-text-field>
                 <v-text-field label="Abstract" v-model="abstract" :hint="hintPosterAbs" persistent-hint counter max="500" multi-line></v-text-field>
               </v-container>
@@ -182,7 +187,7 @@
             </v-card-row>
             <v-card-row>
               <v-card-text>
-                Please remember your code (<b>case sensitive</b>):
+                Please remember your ID (<b>case sensitive</b>):
                 <div class="display-1 red--text amber lighten-4">{{id}}</div>
               </v-card-text>
             </v-card-row>
@@ -196,7 +201,8 @@
             </v-card-row>
             <v-card-row>
               <v-card-text>
-                <v-text-field label="id" v-model="id" required></v-text-field>
+                Don't change it if you are not tring to re-load data from server!
+                <v-text-field label="ID" v-model="id" required></v-text-field>
               </v-card-text>
             </v-card-row>
             <v-card-row actions>
@@ -213,7 +219,7 @@
       el: '#app',
       data: function () {
         return {
-          pageTitle: 'Register',
+          pageTitle: 'Registration',
           nameTitle: '',
           nameTitles: ['Mr.', 'Ms.', 'Dr.', 'Prof.'],
           nameFirst: '',
@@ -242,7 +248,10 @@
           id: '',
           key: '',
           askId: false,
-          error: false
+          error: false,
+          errorMsg: '',
+          success: false,
+          successMsg: ''
         }
       },
       computed: {
@@ -291,6 +300,48 @@
         },
         loadFromServer: function () {
           console.log('Not yet initialized')
+        },
+        fillData: function (data) {
+          try {
+            this.nameTitle = data.nameTitle
+            this.nameFirst = data.nameFirst
+            this.nameLast = data.nameLast
+            this.email = data.email
+            this.affiliation = data.affiliation
+            this.job = data.job
+            this.hotel = data.hotel
+            this.hotelOption = data.hotelOption
+            this.hotelStartDate = data.hotelStartDate
+            this.hotelEndDate = data.hotelEndDate
+            this.doOral = data.doOral
+            this.oralWithPoster = data.oralWithPoster
+            this.doPoster = data.doPoster
+            this.joinTour = data.joinTour
+            this.title = data.title
+            this.abstract = data.abstract
+            this.oralTime = data.oralTime
+            this.key = data.key
+          } catch (error) {
+            // Data Error
+          }
+        },
+        alert: function (msg) {
+          this.errorMsg = msg
+          this.wait = false
+          this.error = true
+          // var me = this
+          // setTimeout(function () {
+          //   me.error = false
+          // }, 5000);
+        },
+        info: function (msg) {
+          this.successMsg = msg
+          this.wait = false
+          this.success = true
+          var me = this
+          setTimeout(function () {
+            me.success = false
+          }, 5000);
         }
       }
     })
