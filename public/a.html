@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="/__/firebase/4.1.2/firebase-app.js"></script>
-    <script src="/__/firebase/4.1.2/firebase-auth.js"></script>
+    <!--<script src="/__/firebase/4.1.2/firebase-auth.js"></script>-->
     <script src="/__/firebase/4.1.2/firebase-database.js"></script>
     <script src="/__/firebase/init.js"></script>
 </head>
@@ -15,51 +15,28 @@
 <body>
     <div id="s" style="padding:24px;font-size:20px;"></div>
     <script src="register.js"></script>
-    <!--<script>
-        // var total = 0
-        // var collisions = 0
-        // function test() {
-            var count = 0
-            var data = []
-            var c = []
-            setInterval(function () {
-                var flag = true
-                // while (flag) { }
-                var id = hash(regRef.push().key)
-                // console.log(id)
-                if (data.indexOf(id) == -1) {
-                    data.push(hash(regRef.push().key))
-                }
-                else {
-                    c.push(id)
-                }
-            }, 1)
-        // }
-        document.querySelector('#s').innerHTML = collisions + ' collisions in ' + total
-    </script>-->
     <script>
         var count = 0
         var data = []
-        var c = []
+        var colli = []
         var x = []
         var y = []
+        var times = 1000000
         var a = setInterval(function () {
-            var id = hash(regRef.push().key)
+            var id = hash(database.ref().push().key)
             // console.log(id)
             if (data.indexOf(id) == -1) {
-                data.push(hash(regRef.push().key))
+                data.push(id)
             }
             else {
-                c.push(id)
+                colli.push(id)
                 x.push(count)
-                y.push(c.length)
+                y.push(colli.length)
             }
             count++
-            // if (count % 10 === 0) {
-            document.querySelector('#s').innerHTML = c.length + ' collisions in ' + count
-            // }
-            if (count === 1000000) { clearInterval(a) }
-        }, 2)
+            document.querySelector('#s').innerHTML = colli.length + ' collisions in ' + count
+            if (count === times) { clearInterval(a) }
+        }, 1)
     </script>
 </body>
 
