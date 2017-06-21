@@ -2,11 +2,6 @@
   min-height: 100%;
 }
 
-
-/*#main{
-  padding-bottom: 66px;
-}*/
-
 @media (min-width: 600px) {
   .hotel-time {
     display: inline-block;
@@ -50,6 +45,10 @@
 
 #posterOption {
   height: 88px;
+}
+
+.not-suggest .input-group__messages > .input-group__hint {
+  color: #ff5722 !important;
 }
 
 .vertical-enter-active {

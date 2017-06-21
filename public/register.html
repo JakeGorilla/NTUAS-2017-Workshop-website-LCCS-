@@ -28,7 +28,7 @@
         <v-card id="main">
           <v-card-row>
             <v-toolbar light>
-              <v-btn icon="icon" @click.native="history.back()" light>
+              <v-btn icon="icon" tag="a" href="/#/registration" light>
                 <v-icon>arrow_back</v-icon>
               </v-btn>
               <v-toolbar-title>Registration</v-toolbar-title>
@@ -135,7 +135,7 @@
             </v-list-item>
           </v-list>
           <!--<transition-group>-->
-          <div v-if="doOral" key="oral">
+          <div v-if="doOral" key="oral" class="mb-5">
             <v-divider></v-divider>
             <v-container class="ma-0 pa-0">
               <div class="subheader subheader--dark">Oral Presentation Information</div>
@@ -146,12 +146,12 @@
                 </div>
                 <v-text-field label="Title" v-model="title" required></v-text-field>
                 <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" :hint="talkTimeHint" :persistent-hint="!oralWithPoster"
-                  single-line required class="my-0"></v-select>
+                  single-line required class="my-0" :class="oralTime=='Talk 5 mins'?'not-suggest':''"></v-select>
                 <v-text-field label="Abstract" v-model="abstract" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
               </v-container>
             </v-container>
           </div>
-          <div v-if="doPoster" key="poster">
+          <div v-if="doPoster" key="poster" class="mb-5">
             <v-divider></v-divider>
             <v-container class="ma-0 pa-0">
               <div class="subheader subheader--dark">Poster Information</div>
@@ -165,6 +165,15 @@
             </v-container>
           </div>
           <!--</transition-group>-->
+          <div key="special">
+            <v-divider></v-divider>
+            <v-container class="ma-0 pa-0">
+              <div class="subheader subheader--dark">Special requirements and suggestions</div>
+              <v-container class="ma-0 px-3 py-0">
+                <v-text-field label="write here..." v-model="special" class="my-1" multi-line></v-text-field>
+              </v-container>
+            </v-container>
+          </div>
           <v-card-row height="56" class="grey lighten-4 mt-3"></v-card-row>
         </v-card>
       </v-flex>
@@ -256,6 +265,7 @@
           oralTime: '',
           hintOralAbs: '300~500 words, you can submit abstract later by sending email',
           hintPosterAbs: '300~500 words, you can submit abstract later by sending email',
+          special: '',
           wait: false,
           submitted: false,
           id: '',
@@ -295,6 +305,7 @@
             title: this.title,
             abstract: this.abstract,
             oralTime: this.oralTime,
+            special: this.special
           }
         },
         showDialog: function () {
@@ -367,6 +378,7 @@
             this.title = data.title
             this.abstract = data.abstract
             this.oralTime = data.oralTime
+            this.special = data.special
             this.key = data.key
           } catch (error) {
             // Data Error
