@@ -83,13 +83,13 @@
               <v-flex offset-xs1>
                 <div class="hotel-time">
                   <v-menu v-model="hotelStartMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
-                    <v-text-field label="Check-in" v-model="hotelStartDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                    <v-text-field label="Check-in" v-model="hotelStartDate" slot="activator" prepend-icon="event" required readonly></v-text-field>
                     <v-date-picker v-model="hotelStartDate" no-title scrollable actions dark></v-date-picker>
                   </v-menu>
                 </div>
                 <div class="hotel-time">
                   <v-menu v-model="hotelEndMenu" lazy transition="v-scale-transition" offset-y :nudge-left="40">
-                    <v-text-field label="Check-out" v-model="hotelEndDate" slot="activator" prepend-icon="event" readonly></v-text-field>
+                    <v-text-field label="Check-out" v-model="hotelEndDate" slot="activator" prepend-icon="event" required readonly></v-text-field>
                     <v-date-picker v-model="hotelEndDate" no-title scrollable actions dark></v-date-picker>
                   </v-menu>
                 </div>
