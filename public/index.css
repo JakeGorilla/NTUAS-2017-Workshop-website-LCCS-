@@ -15,25 +15,37 @@ main {
   border: 0;
 }
 
+@media (max-width: 599px) {
+  main {
+    word-wrap: break-word;
+  }
+}
+
 @media (min-width: 600px) {
   .flex1 {
     flex: 1;
   }
+
   .map {
     height: 450px;
   }
+
   html {
     overflow-x: auto;
   }
+
   .app-width {
     min-width: 960px;
   }
+
   .sidebar {
     width: 240px;
   }
+
   .homeside {
     width: 220px;
   }
+
   .min-height {
     min-height: 600px;
   }
@@ -67,7 +79,7 @@ main {
   opacity: 0;
 }
 
-#regnof li{
+#regnof li {
   margin-bottom: 8px;
 }
 
