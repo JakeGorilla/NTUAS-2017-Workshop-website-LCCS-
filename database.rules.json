@@ -1,18 +1,7 @@
 {
   "rules": {
     ".write": "true",
-    "reg": {
-      ".read": "false",
-      "$id": {
-        ".validate": "newData.hasChildren(['id','nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime','special','timestamp'])",
-        "email": {
-          ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
-        },
-        "id": {
-          ".validate": "!data.exists() || newData.isString() && newData.val() === data.val()"
-        }
-      }
-    },
+    ".read": "auth.uid === 'jL9aHKOyOOTOsd6CX0P4TMjpKY62'",
     "edit": {
       ".read": "false",
       ".write": "true",
@@ -23,6 +12,18 @@
           ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
         },
         "key": {
+          ".validate": "!data.exists() || newData.isString() && newData.val() === data.val()"
+        }
+      }
+    },
+    "reg": {
+      ".read": "false",
+      "$id": {
+        ".validate": "newData.hasChildren(['id','nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime','special','timestamp'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
+        },
+        "id": {
           ".validate": "!data.exists() || newData.isString() && newData.val() === data.val()"
         }
       }

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Registration Table</title>
+  <!-- Font library and icon pack -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <!-- for IE -->
+  <script src="IE-compatible.js"></script>
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- Vuetify.js required files -->
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet" type="text/css">
+  <!-- firebase -->
+  <script src="/__/firebase/4.1.2/firebase-app.js"></script>
+  <script src="/__/firebase/4.1.2/firebase-auth.js"></script>
+  <script src="/__/firebase/4.1.2/firebase-database.js"></script>
+  <script src="/__/firebase/init.js"></script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    .nobreak {
+      white-space: nowrap;
+    }
+
+    .click {
+      cursor: pointer;
+    }
+
+    td {
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+    }
+  </style>
+</head>
+
+<body>
+  <v-app id="app" class="light-green lighten-4 fill-height">
+    <v-layout justify-center>
+      <v-flex xs12 fill-height>
+        <v-dialog v-model="notauth" persistent>
+          <v-card>
+            <v-card-row>
+              <v-card-title>Login</v-card-title>
+            </v-card-row>
+            <v-container class="py-0">
+              <v-text-field label="acc" v-model="acc" required></v-text-field>
+              <v-text-field label="p" v-model="p" required></v-text-field>
+            </v-container>
+            <v-card-row actions>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="clearLogin">clear</v-btn>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="login">in</v-btn>
+            </v-card-row>
+          </v-card>
+        </v-dialog>
+        <v-card v-cloak v-if="!notauth">
+          <v-card-title>
+            Registration
+            <v-spacer></v-spacer>
+            <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
+          </v-card-title>
+          <v-data-table :headers="headers" :items="regs" :search="search" hide-actions>
+            <template slot="items" scope="props">
+              <td class="nobreak">{{ props.item.name }}</td>
+              <td class="text-xs-right nobreak">{{ props.item.email }}</td>
+              <td class="text-xs-right">{{ props.item.affiliation }}</td>
+              <td class="text-xs-right">{{ props.item.job }}</td>
+              <td class="text-xs-right">{{ props.item.hotelOption }}</td>
+              <td class="text-xs-right nobreak">{{ props.item.hotelStartDate }}</td>
+              <td class="text-xs-right nobreak">{{ props.item.hotelEndDate }}</td>
+              <td class="text-xs-right">{{ props.item.doPoster }}</td>
+              <td class="text-xs-right">{{ props.item.doOral }}</td>
+              <td class="text-xs-right nobreak">{{ props.item.oralTime }}</td>
+              <td class="text-xs-right">{{ props.item.joinTour }}</td>
+              <td class="text-xs-right">{{ props.item.title }}</td>
+              <td class="text-xs-right" v-if="!props.item.abstract">{{ props.item.hasAbstract }}</td>
+              <td class="text-xs-right click" v-if="props.item.abstract" @click="showContent(props.item,'abstract')">{{ props.item.hasAbstract }}</td>
+              <td class="text-xs-right" v-if="!props.item.special">{{ props.item.hasSpecial }}</td>
+              <td class="text-xs-right click" v-if="props.item.special" @click="showContent(props.item,'special')">{{ props.item.hasSpecial }}</td>
+              <td class="text-xs-right">{{ props.item.id }}</td>
+              <!--<td class="text-xs-right">{{ props.item.key }}</td>-->
+            </template>
+          </v-data-table>
+          <v-progress-linear :active="loading" height="2" :indeterminate="true"></v-progress-linear>
+          <v-card-row actions>
+            <v-btn primary light @click.native="logout">Logout</v-btn>
+          </v-card-row>
+        </v-card>
+      </v-flex>
+      <v-dialog v-model="dialog.show" width=640 persistent>
+        <v-card>
+          <v-card-row>
+            <v-card-title>{{dialog.who}}'s {{dialog.type}}</v-card-title>
+          </v-card-row>
+          <v-card-row>
+            <v-card-text>{{ dialog.content }}</v-card-text>
+          </v-card-row>
+          <v-card-row actions>
+            <v-btn class="green--text darken-1" flat="flat" @click.native="dialog.show = false">Dismiss</v-btn>
+          </v-card-row>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+  </v-app>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          notauth: true,
+          acc: '',
+          p: '',
+          search: '',
+          headers: [
+            { text: 'Name', value: 'name', left: true },
+            { text: 'Email', value: 'email' },
+            { text: 'Affiliation', value: 'affiliation' },
+            { text: 'Job', value: 'job' },
+            { text: 'Hotel', value: 'hotelOption' },
+            { text: 'Check-in', value: 'hotelStartDate' },
+            { text: 'Check-out', value: 'hotelEndDate' },
+            { text: 'Poster', value: 'doPoster' },
+            { text: 'Oral', value: 'doOral' },
+            { text: 'Talk time', value: 'oralTime' },
+            { text: 'Tour', value: 'joinTour' },
+            { text: 'Title', value: 'title' },
+            { text: 'Abstract', value: 'hasAbstract' },
+            { text: 'Special', value: 'hasSpecial' },
+            { text: 'ID', value: 'id' },
+            // { text: 'Key', value: 'key' }
+          ],
+          regs: [],
+          loading: true,
+          dialog: {
+            show: false,
+            who: '',
+            type: '',
+            content: ''
+          }
+        }
+      },
+      mounted: function () {
+        var me = this
+        firebase.auth().onAuthStateChanged(function (user) {
+          if (user) {
+            me.notauth = false
+            me.clearLogin()
+            me.load()
+          } else {
+            // User is signed out.
+            // ...
+            me.notauth = true
+            me.regs = []
+            me.clearLogin()
+          }
+        })
+      },
+      methods: {
+        clearLogin: function () {
+          this.acc = ''
+          this.p = ''
+        },
+        logout: function () {
+          firebase.auth().signOut().catch(function (error) {
+            // An error happened.
+            var errorMessage = error.message
+            alert(errorMessage)
+          })
+        },
+        login: function () {
+          firebase.auth().signInWithEmailAndPassword(this.acc, this.p).catch(function (error) {
+            // Handle Errors here.
+            // var errorCode = error.code
+            var errorMessage = error.message
+            // ...
+            alert(errorMessage)
+          })
+        },
+        load: function () {
+          var me = this
+          me.loading = true
+          firebase.database().ref('reg').once('value').then(function (snap) {
+            if (snap.exists()) {
+              var data = snap.val()
+              var keys = Object.keys(data)
+              console.log()
+              keys.forEach(function (key) {
+                console.log(key)
+                me.regs.push(me.processReg(key, data[key]))
+              })
+              me.loading = false
+            }
+          })
+        },
+        showContent: function (item, type) {
+          this.dialog.who = item.name
+          this.dialog.type = type
+          this.dialog.content = item[type]
+          this.dialog.show = true
+        },
+        processReg: function (key, data) {
+          data = Object.assign({}, data)
+          if (!data.hotel) {
+            data.hotelOption = '-'
+            data.hotelStartDate = '-'
+            data.hotelEndDate = '-'
+            data.hotel = '×'
+          } else {
+            data.hotel = '√'
+          }
+          if (data.doPoster) {
+            data.doPoster = '√'
+          } else {
+            if (!data.doOral) {
+              // data.oralWithPoster = '-'
+              data.oralTime = '-'
+              data.doOral = '×'
+            } else {
+              data.oralTime = data.oralTime.replace('Talk ', '')
+              data.doOral = '√'
+              if (data.oralWithPoster) {
+                data.doPoster = '√'
+              } else {
+                data.doPoster = '×'
+              }
+            }
+          }
+          if (!data.joinTour) {
+            data.joinTour = '×'
+          } else {
+            data.joinTour = '√'
+          }
+          if (!data.abstract) {
+            data.hasAbstract = '×'
+          } else {
+            data.hasAbstract = '√'
+          }
+          if (!data.special) {
+            data.hasSpecial = '×'
+          } else {
+            data.hasSpecial = '√'
+          }
+          return {
+            name: data.nameTitle + ' ' + data.nameFirst + ' ' + data.nameLast,
+            email: data.email,
+            affiliation: data.affiliation,
+            job: data.job,
+            hotel: data.hotel,
+            hotelOption: data.hotelOption,
+            hotelStartDate: data.hotelStartDate,
+            hotelEndDate: data.hotelEndDate,
+            doPoster: data.doPoster,
+            doOral: data.doOral,
+            oralTime: data.oralTime,
+            joinTour: data.joinTour,
+            title: data.title,
+            hasAbstract: data.hasAbstract,
+            hasSpecial: data.hasSpecial,
+            abstract: data.abstract,
+            special: data.special,
+            id: data.id,
+            key: key
+          }
+        },
+      }
+    })
+  </script>
+  <!--<script>
+  app.regs.push(app.processReg('a',{email:'aaa@bbbbbbb.com'}))
+  </script>-->
+</body>
+
+</html>
