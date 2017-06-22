@@ -4,7 +4,7 @@
     "reg": {
       ".read": "false",
       "$id": {
-        ".validate": "newData.hasChildren(['id','nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime','special','time'])",
+        ".validate": "newData.hasChildren(['id','nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime','special','timestamp'])",
         "email": {
           ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
         },
@@ -18,7 +18,7 @@
       ".write": "true",
       "$id": {
         ".read": "true",
-        ".validate": "newData.hasChildren(['key','nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime','special','time'])",
+        ".validate": "newData.hasChildren(['key','nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime','special','timestamp'])",
         "email": {
           ".validate": "newData.isString() && newData.val().contains('@') && newData.val().contains('.')"
         },
