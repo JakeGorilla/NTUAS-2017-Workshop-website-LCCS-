@@ -65,6 +65,7 @@
             <v-spacer></v-spacer>
             <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
           </v-card-title>
+          <v-progress-linear :active="loading" height="2" :indeterminate="true"></v-progress-linear>
           <v-data-table :headers="headers" :items="regs" :search="search" hide-actions>
             <template slot="items" scope="props">
               <td class="nobreak">{{ props.item.name }}</td>
@@ -87,7 +88,6 @@
               <!--<td class="text-xs-right">{{ props.item.key }}</td>-->
             </template>
           </v-data-table>
-          <v-progress-linear :active="loading" height="2" :indeterminate="true"></v-progress-linear>
           <v-card-row actions>
             <v-btn primary light @click.native="logout">Logout</v-btn>
           </v-card-row>
