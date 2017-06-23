@@ -217,6 +217,7 @@
           if (data.doPoster) {
             data.doPoster = '√'
           } else {
+            data.doPoster = '×'
             if (!data.doOral) {
               // data.oralWithPoster = '-'
               data.oralTime = '-'
@@ -226,8 +227,6 @@
               data.doOral = '√'
               if (data.oralWithPoster) {
                 data.doPoster = '√'
-              } else {
-                data.doPoster = '×'
               }
             }
           }
