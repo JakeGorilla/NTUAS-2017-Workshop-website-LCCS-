@@ -31,11 +31,18 @@
 
     .click {
       cursor: pointer;
+      color: #f57c00!important;
+      font-weight: bold !important;
+      /*font-size: 16px !important;*/
     }
 
     td {
       padding-top: 8px !important;
       padding-bottom: 8px !important;
+    }
+
+    td.long {
+      min-width: 248px;
     }
   </style>
 </head>
@@ -65,12 +72,12 @@
             <v-spacer></v-spacer>
             <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
           </v-card-title>
-          <v-progress-linear :active="loading" height="2" :indeterminate="true"></v-progress-linear>
-          <v-data-table :headers="headers" :items="regs" :search="search" hide-actions>
+          <!--<v-progress-linear :active="loading" height="2" :indeterminate="true"></v-progress-linear>-->
+          <v-data-table :headers="headers" :items="regs" :search="search" :loading="loading" hide-actions>
             <template slot="items" scope="props">
               <td class="nobreak">{{ props.item.name }}</td>
-              <td class="text-xs-right nobreak">{{ props.item.email }}</td>
-              <td class="text-xs-right">{{ props.item.affiliation }}</td>
+              <td class="text-xs-right click" @click="showContent(props.item,'email')">v</td>
+              <td class="text-xs-right long">{{ props.item.affiliation }}</td>
               <td class="text-xs-right">{{ props.item.job }}</td>
               <td class="text-xs-right">{{ props.item.hotelOption }}</td>
               <td class="text-xs-right nobreak">{{ props.item.hotelStartDate }}</td>
@@ -79,12 +86,12 @@
               <td class="text-xs-right">{{ props.item.doOral }}</td>
               <td class="text-xs-right nobreak">{{ props.item.oralTime }}</td>
               <td class="text-xs-right">{{ props.item.joinTour }}</td>
-              <td class="text-xs-right">{{ props.item.title }}</td>
+              <td class="text-xs-right long">{{ props.item.title }}</td>
               <td class="text-xs-right" v-if="!props.item.abstract">{{ props.item.hasAbstract }}</td>
               <td class="text-xs-right click" v-if="props.item.abstract" @click="showContent(props.item,'abstract')">{{ props.item.hasAbstract }}</td>
               <td class="text-xs-right" v-if="!props.item.special">{{ props.item.hasSpecial }}</td>
               <td class="text-xs-right click" v-if="props.item.special" @click="showContent(props.item,'special')">{{ props.item.hasSpecial }}</td>
-              <td class="text-xs-right">{{ props.item.id }}</td>
+              <td class="text-xs-right click" @click="showContent(props.item,'id')">v</td>
               <!--<td class="text-xs-right">{{ props.item.key }}</td>-->
             </template>
           </v-data-table>
@@ -96,10 +103,10 @@
       <v-dialog v-model="dialog.show" width=640 persistent>
         <v-card>
           <v-card-row>
-            <v-card-title>{{dialog.who}}'s {{dialog.type}}</v-card-title>
+            <v-card-title>{{dialog.who}}'s {{dialog.type.toUpperCase()}}</v-card-title>
           </v-card-row>
           <v-card-row>
-            <v-card-text>{{ dialog.content }}</v-card-text>
+            <v-card-text style="font-size:16px;line-height:1.8;">{{ dialog.content }}</v-card-text>
           </v-card-row>
           <v-card-row actions>
             <v-btn class="green--text darken-1" flat="flat" @click.native="dialog.show = false">Dismiss</v-btn>
@@ -130,8 +137,8 @@
             { text: 'Talk time', value: 'oralTime' },
             { text: 'Tour', value: 'joinTour' },
             { text: 'Title', value: 'title' },
-            { text: 'Abstract', value: 'hasAbstract' },
-            { text: 'Special', value: 'hasSpecial' },
+            { text: 'Abs', value: 'hasAbstract' },
+            { text: 'Sp', value: 'hasSpecial' },
             { text: 'ID', value: 'id' },
             // { text: 'Key', value: 'key' }
           ],
@@ -189,9 +196,8 @@
             if (snap.exists()) {
               var data = snap.val()
               var keys = Object.keys(data)
-              console.log()
               keys.forEach(function (key) {
-                console.log(key)
+                // console.log(key)
                 me.regs.push(me.processReg(key, data[key]))
               })
               me.loading = false
@@ -206,46 +212,71 @@
         },
         processReg: function (key, data) {
           data = Object.assign({}, data)
+          // replace string
+          if (!data.title) {
+            data.title = '-'
+          }
+          if (data.hotelOption == 'Hsiu-Chi House') {
+            data.hotelOption = 'HC'
+          } else if (data.hotelOption == 'Just Sleep') {
+            data.hotelOption = 'JS'
+          }
+          if (data.hotelStartDate) {
+            data.hotelStartDate = data.hotelStartDate.replace('2017-', '')
+            data.hotelStartDate = data.hotelStartDate.replace('-', '/')
+          }
+          if (data.hotelEndDate) {
+            data.hotelEndDate = data.hotelEndDate.replace('2017-', '')
+            data.hotelEndDate = data.hotelEndDate.replace('-', '/')
+          }
+          if (data.oralTime) {
+            data.oralTime = data.oralTime.replace('Talk ', '')
+          }
+          if (data.abstract.match(/tbd/i)) {
+            data.abstract = ''
+          }
+          // handle true/false
+          var t = 'v', f = 'x';
+          // var t = '√', f = '×';
           if (!data.hotel) {
             data.hotelOption = '-'
             data.hotelStartDate = '-'
             data.hotelEndDate = '-'
-            data.hotel = '×'
+            data.hotel = ''
           } else {
-            data.hotel = '√'
+            data.hotel = t
           }
           if (data.doPoster) {
-            data.doPoster = '√'
+            data.doPoster = t
             data.oralTime = '-'
-            data.doOral = '×'
+            data.doOral = f
           } else {
-            data.doPoster = '×'
+            data.doPoster = f
             if (!data.doOral) {
               // data.oralWithPoster = '-'
               data.oralTime = '-'
-              data.doOral = '×'
+              data.doOral = f
             } else {
-              data.oralTime = data.oralTime.replace('Talk ', '')
-              data.doOral = '√'
+              data.doOral = t
               if (data.oralWithPoster) {
-                data.doPoster = '√'
+                data.doPoster = t
               }
             }
           }
           if (!data.joinTour) {
-            data.joinTour = '×'
+            data.joinTour = f
           } else {
-            data.joinTour = '√'
+            data.joinTour = t
           }
           if (!data.abstract) {
-            data.hasAbstract = '×'
+            data.hasAbstract = f
           } else {
-            data.hasAbstract = '√'
+            data.hasAbstract = t
           }
           if (!data.special) {
-            data.hasSpecial = '×'
+            data.hasSpecial = f
           } else {
-            data.hasSpecial = '√'
+            data.hasSpecial = t
           }
           return {
             name: data.nameTitle + ' ' + data.nameFirst + ' ' + data.nameLast,
