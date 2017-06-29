@@ -44,6 +44,19 @@
     td.long {
       min-width: 248px;
     }
+
+    .dialog--scrollable {
+      max-height: 80vh !important;
+    }
+
+    .dialog--scrollable>.card {
+      max-height: 100% !important;
+    }
+
+    .dialog--scrollable>.card .card__text {
+      max-height: calc( 80vh - 68px - 52px );
+      overflow-y: auto;
+    }
   </style>
 </head>
 
@@ -76,22 +89,24 @@
           <v-data-table :headers="headers" :items="regs" :search="search" :loading="loading" hide-actions>
             <template slot="items" scope="props">
               <td class="nobreak">{{ props.item.name }}</td>
-              <td class="text-xs-right click" @click="showContent(props.item,'email')">v</td>
+              <td class="text-xs-right click" @click="showContent(props.item,'email')"><v-icon>inbox</v-icon></td>
               <td class="text-xs-right long">{{ props.item.affiliation }}</td>
               <td class="text-xs-right">{{ props.item.job }}</td>
               <td class="text-xs-right">{{ props.item.hotelOption }}</td>
               <td class="text-xs-right nobreak">{{ props.item.hotelStartDate }}</td>
               <td class="text-xs-right nobreak">{{ props.item.hotelEndDate }}</td>
-              <td class="text-xs-right">{{ props.item.doPoster }}</td>
-              <td class="text-xs-right">{{ props.item.doOral }}</td>
+              <td class="text-xs-right"><v-icon>{{props.item.doPoster}}</v-icon></td>
+              <td class="text-xs-right"><v-icon>{{props.item.doOral}}</v-icon></td>
               <td class="text-xs-right nobreak">{{ props.item.oralTime }}</td>
-              <td class="text-xs-right">{{ props.item.joinTour }}</td>
+              <td class="text-xs-right"><v-icon>{{props.item.joinTour}}</v-icon></td>
               <td class="text-xs-right long">{{ props.item.title }}</td>
-              <td class="text-xs-right" v-if="!props.item.abstract">{{ props.item.hasAbstract }}</td>
-              <td class="text-xs-right click" v-if="props.item.abstract" @click="showContent(props.item,'abstract')">{{ props.item.hasAbstract }}</td>
-              <td class="text-xs-right" v-if="!props.item.special">{{ props.item.hasSpecial }}</td>
-              <td class="text-xs-right click" v-if="props.item.special" @click="showContent(props.item,'special')">{{ props.item.hasSpecial }}</td>
-              <td class="text-xs-right click" @click="showContent(props.item,'id')">v</td>
+              <!--<td class="text-xs-right" v-if="!props.item.abstract"><v-icon>{{props.item.hasAbstract}}</v-icon></td>-->
+              <td class="text-xs-right" v-if="!props.item.abstract">-</td>
+              <td class="text-xs-right click" v-if="props.item.abstract" @click="showContent(props.item,'abstract')"><v-icon><v-icon>inbox</v-icon></v-icon></td>
+              <!--<td class="text-xs-right" v-if="!props.item.special"><v-icon>{{props.item.hasSpecial}}</v-icon></td>-->
+              <td class="text-xs-right" v-if="!props.item.special">-</td>
+              <td class="text-xs-right click" v-if="props.item.special" @click="showContent(props.item,'special')"><v-icon>inbox</v-icon></td>
+              <td class="text-xs-right click" @click="showContent(props.item,'id')"><v-icon>inbox</v-icon></td>
               <!--<td class="text-xs-right">{{ props.item.key }}</td>-->
             </template>
           </v-data-table>
@@ -100,7 +115,7 @@
           </v-card-row>
         </v-card>
       </v-flex>
-      <v-dialog v-model="dialog.show" width=640 persistent>
+      <v-dialog scrollable v-model="dialog.show" width="800px" persistent id="alotstext">
         <v-card>
           <v-card-row>
             <v-card-title>{{dialog.who}}'s {{dialog.type.toUpperCase()}}</v-card-title>
@@ -232,11 +247,12 @@
           if (data.oralTime) {
             data.oralTime = data.oralTime.replace('Talk ', '')
           }
-          if (data.abstract.match(/tbd/i)) {
+          if (data.abstract.match(/tbd/i) && data.abstract.length < 5) {
             data.abstract = ''
           }
           // handle true/false
-          var t = 'v', f = 'x';
+          var t = 'done', f = 'clear';
+          // var t = 'v', f = 'x';
           // var t = '√', f = '×';
           if (!data.hotel) {
             data.hotelOption = '-'
