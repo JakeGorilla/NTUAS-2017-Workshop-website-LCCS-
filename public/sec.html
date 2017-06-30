@@ -86,28 +86,29 @@
             <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
           </v-card-title>
           <!--<v-progress-linear :active="loading" height="2" :indeterminate="true"></v-progress-linear>-->
-          <v-data-table :headers="headers" :items="regs" :search="search" :loading="loading" hide-actions>
+          <v-data-table :headers="headers" :items="regs" :search="search" :loading="loading" :pagination.sync="pagination">
             <template slot="items" scope="props">
+              <td class="nobreak" v-tooltip:right="{ html: props.item.time.toTimeString() }">{{ (props.item.time.getMonth()+1) + '/' + props.item.time.getDate() }}</td>
               <td class="nobreak">{{ props.item.name }}</td>
-              <td class="text-xs-right click" @click="showContent(props.item,'email')"><v-icon>inbox</v-icon></td>
-              <td class="text-xs-right long">{{ props.item.affiliation }}</td>
-              <td class="text-xs-right">{{ props.item.job }}</td>
-              <td class="text-xs-right">{{ props.item.hotelOption }}</td>
-              <td class="text-xs-right nobreak">{{ props.item.hotelStartDate }}</td>
-              <td class="text-xs-right nobreak">{{ props.item.hotelEndDate }}</td>
-              <td class="text-xs-right"><v-icon>{{props.item.doPoster}}</v-icon></td>
-              <td class="text-xs-right"><v-icon>{{props.item.doOral}}</v-icon></td>
-              <td class="text-xs-right nobreak">{{ props.item.oralTime }}</td>
-              <td class="text-xs-right"><v-icon>{{props.item.joinTour}}</v-icon></td>
-              <td class="text-xs-right long">{{ props.item.title }}</td>
-              <!--<td class="text-xs-right" v-if="!props.item.abstract"><v-icon>{{props.item.hasAbstract}}</v-icon></td>-->
-              <td class="text-xs-right" v-if="!props.item.abstract">-</td>
-              <td class="text-xs-right click" v-if="props.item.abstract" @click="showContent(props.item,'abstract')"><v-icon><v-icon>inbox</v-icon></v-icon></td>
-              <!--<td class="text-xs-right" v-if="!props.item.special"><v-icon>{{props.item.hasSpecial}}</v-icon></td>-->
-              <td class="text-xs-right" v-if="!props.item.special">-</td>
-              <td class="text-xs-right click" v-if="props.item.special" @click="showContent(props.item,'special')"><v-icon>inbox</v-icon></td>
-              <td class="text-xs-right click" @click="showContent(props.item,'id')"><v-icon>inbox</v-icon></td>
-              <!--<td class="text-xs-right">{{ props.item.key }}</td>-->
+              <td class="click" @click="showContent(props.item,'email')"><v-icon>inbox</v-icon></td>
+              <td class="long">{{ props.item.affiliation }}</td>
+              <td>{{ props.item.job }}</td>
+              <td>{{ props.item.hotelOption }}</td>
+              <td class="nobreak">{{ props.item.hotelStartDate }}</td>
+              <td class="nobreak">{{ props.item.hotelEndDate }}</td>
+              <td><v-icon>{{props.item.doPoster}}</v-icon></td>
+              <td><v-icon>{{props.item.doOral}}</v-icon></td>
+              <td class="nobreak">{{ props.item.oralTime }}</td>
+              <td><v-icon>{{props.item.joinTour}}</v-icon></td>
+              <td class="long">{{ props.item.title }}</td>
+              <!--<td  v-if="!props.item.abstract"><v-icon>{{props.item.hasAbstract}}</v-icon></td>-->
+              <td  v-if="!props.item.abstract">-</td>
+              <td class="click" v-if="props.item.abstract" @click="showContent(props.item,'abstract')"><v-icon><v-icon>inbox</v-icon></v-icon></td>
+              <!--<td  v-if="!props.item.special"><v-icon>{{props.item.hasSpecial}}</v-icon></td>-->
+              <td  v-if="!props.item.special">-</td>
+              <td class="click" v-if="props.item.special" @click="showContent(props.item,'special')"><v-icon>inbox</v-icon></td>
+              <td class="click" @click="showContent(props.item,'id')"><v-icon>inbox</v-icon></td>
+              <!--<td>{{ props.item.key }}</td>-->
             </template>
           </v-data-table>
           <v-card-row actions>
@@ -138,24 +139,26 @@
           notauth: true,
           acc: '',
           p: '',
+          pagination:{descending:true,rowsPerPage:-1,sortBy:'time'},
           search: '',
           headers: [
+            { text: 'Time', value: 'time', left: true },
             { text: 'Name', value: 'name', left: true },
-            { text: 'Email', value: 'email' },
-            { text: 'Affiliation', value: 'affiliation' },
-            { text: 'Job', value: 'job' },
-            { text: 'Hotel', value: 'hotelOption' },
-            { text: 'Check-in', value: 'hotelStartDate' },
-            { text: 'Check-out', value: 'hotelEndDate' },
-            { text: 'Poster', value: 'doPoster' },
-            { text: 'Oral', value: 'doOral' },
-            { text: 'Talk time', value: 'oralTime' },
-            { text: 'Tour', value: 'joinTour' },
-            { text: 'Title', value: 'title' },
-            { text: 'Abs', value: 'hasAbstract' },
-            { text: 'Sp', value: 'hasSpecial' },
-            { text: 'ID', value: 'id' },
-            // { text: 'Key', value: 'key' }
+            { text: 'Email', value: 'email', left: true },
+            { text: 'Affiliation', value: 'affiliation', left: true },
+            { text: 'Job', value: 'job', left: true },
+            { text: 'Hotel', value: 'hotelOption', left: true },
+            { text: 'Check-in', value: 'hotelStartDate', left: true },
+            { text: 'Check-out', value: 'hotelEndDate', left: true },
+            { text: 'Poster', value: 'doPoster', left: true },
+            { text: 'Oral', value: 'doOral', left: true },
+            { text: 'Talk time', value: 'oralTime', left: true },
+            { text: 'Tour', value: 'joinTour', left: true },
+            { text: 'Title', value: 'title', left: true },
+            { text: 'Abs', value: 'hasAbstract', left: true },
+            { text: 'Sp', value: 'hasSpecial', left: true },
+            { text: 'ID', value: 'id', left: true },
+            // { text: 'Key', value: 'key', left: true }
           ],
           regs: [],
           loading: true,
@@ -313,7 +316,8 @@
             abstract: data.abstract,
             special: data.special,
             id: data.id,
-            key: key
+            key: key,
+            time: new Date(data.timestamp)
           }
         },
       }
