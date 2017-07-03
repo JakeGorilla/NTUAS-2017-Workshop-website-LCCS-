@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Registration Table</title>
+  <title>Copy Registration Table</title>
   <!-- Font library and icon pack -->
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
   <!-- for IE -->
@@ -29,24 +29,11 @@
       min-height: 100vh;
     }
 
-    .nobreak {
-      white-space: nowrap;
-    }
-
-    .click {
-      cursor: pointer;
-      color: #f57c00!important;
-      font-weight: bold !important;
-      /*font-size: 16px !important;*/
-    }
-
+    table,
+    th,
     td {
-      padding-top: 8px !important;
-      padding-bottom: 8px !important;
-    }
-
-    td.long {
-      min-width: 248px;
+      border: 1px solid black;
+      border-collapse: collapse;
     }
 
     .dialog--scrollable {
@@ -58,17 +45,17 @@
     }
 
     .dialog--scrollable>.card .card__text {
-      max-height: calc( 80vh - 68px - 52px );
+      max-height: calc( 80vh - 68px - 52px);
       overflow-y: auto;
     }
   </style>
 </head>
 
 <body>
-  <v-app id="app" class="light-green lighten-4 fill-height">
+  <v-app id="app" class="light-green lighten-4">
     <v-layout justify-center>
-      <v-flex xs12 fill-height>
-        <v-dialog v-model="notauth" persistent>
+      <v-flex xs12 fill-height pa-3>
+        <v-dialog v-cloak v-model="notauth" persistent>
           <v-card>
             <v-card-row>
               <v-card-title>Login</v-card-title>
@@ -83,59 +70,31 @@
             </v-card-row>
           </v-card>
         </v-dialog>
-        <v-card v-cloak v-if="!notauth">
-          <v-card-title>
-            Registration
-            <v-spacer></v-spacer>
-            <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
-          </v-card-title>
-          <!--<v-progress-linear :active="loading" height="2" :indeterminate="true"></v-progress-linear>-->
-          <v-data-table :headers="headers" :items="regs" :search="search" :loading="loading" :pagination.sync="pagination">
-            <template slot="items" scope="props">
-              <td class="nobreak" v-tooltip:right="{ html: props.item.time.toTimeString() }">{{ (props.item.time.getMonth()+1) + '/' + props.item.time.getDate() }}</td>
-              <td class="nobreak">{{ props.item.name }}</td>
-              <td class="click" @click="showContent(props.item,'email')"><v-icon>inbox</v-icon></td>
-              <td class="long">{{ props.item.affiliation }}</td>
-              <td>{{ props.item.job }}</td>
-              <td>{{ props.item.hotelOption }}</td>
-              <td class="nobreak">{{ props.item.hotelStartDate }}</td>
-              <td class="nobreak">{{ props.item.hotelEndDate }}</td>
-              <td><v-icon>{{props.item.doPoster}}</v-icon></td>
-              <td><v-icon>{{props.item.doOral}}</v-icon></td>
-              <td class="nobreak">{{ props.item.oralTime }}</td>
-              <td><v-icon>{{props.item.joinTour}}</v-icon></td>
-              <td class="long">{{ props.item.title }}</td>
-              <!--<td v-if="!props.item.abstract"><v-icon>{{props.item.hasAbstract}}</v-icon></td>-->
-              <td v-if="!props.item.abstract">-</td>
-              <td class="click" v-if="props.item.abstract" @click="showContent(props.item,'abstract')"><v-icon><v-icon>inbox</v-icon></v-icon></td>
-              <!--<td v-if="!props.item.special"><v-icon>{{props.item.hasSpecial}}</v-icon></td>-->
-              <td v-if="!props.item.special">-</td>
-              <td class="click" v-if="props.item.special" @click="showContent(props.item,'special')"><v-icon>inbox</v-icon></td>
-              <td class="click" @click="showContent(props.item,'id')"><v-icon>inbox</v-icon></td>
-              <!--<td>{{ props.item.key }}</td>-->
-            </template>
-          </v-data-table>
-          <v-card-row actions>
-            <v-btn flat class="green--text" tag="a" href="copy.html">Copy Mode</v-btn>
-            <v-btn primary light @click.native="logout">Logout</v-btn>
-          </v-card-row>
-        </v-card>
+        <v-dialog v-cloak v-model="init" persistent scrollable>
+          <v-card>
+            <v-card-title>Select data for copy</v-card-title>
+            <v-divider></v-divider>
+            <v-card-row>
+              <v-card-text>
+                <div v-for="item in list">
+                  <v-checkbox :label="nametable[item]" v-model="show[item]"></v-checkbox>
+                </div>
+              </v-card-text>
+            </v-card-row>
+            <v-card-row actions>
+              <v-btn class="green--text darken-1" flat="flat" @click.native="selected=true">Go</v-btn>
+            </v-card-row>
+          </v-card>
+        </v-dialog>
+        <div is="table" v-cloak v-if="!notauth && selected">
+          <div is="tr">
+            <span is="th" v-for="item in list" v-if="show[item]">{{nametable[item]}}</span>
+          </div>
+          <div is="tr" v-for="reg in regs">
+            <span is="td" v-for="item in list" v-if="show[item]">{{reg[item]}}</span>
+          </div>
+        </div>
       </v-flex>
-      <v-dialog scrollable v-model="dialog.show" width="800px" persistent id="alotstext">
-        <v-card>
-          <v-card-row>
-            <v-card-title>{{dialog.who}}'s {{dialog.type.toUpperCase()}}</v-card-title>
-          </v-card-row>
-          <v-divider></v-divider>
-          <v-card-row>
-            <v-card-text style="font-size:16px;line-height:1.8;">{{ dialog.content }}</v-card-text>
-          </v-card-row>
-          <v-divider></v-divider>
-          <v-card-row actions>
-            <v-btn class="green--text darken-1" flat="flat" @click.native="dialog.show = false">Dismiss</v-btn>
-          </v-card-row>
-        </v-card>
-      </v-dialog>
     </v-layout>
   </v-app>
   <script>
@@ -146,34 +105,49 @@
           notauth: true,
           acc: '',
           p: '',
-          pagination:{descending:true,rowsPerPage:-1,sortBy:'time'},
-          search: '',
-          headers: [
-            { text: 'Time', value: 'time', left: true },
-            { text: 'Name', value: 'name', left: true },
-            { text: 'Email', value: 'email', left: true },
-            { text: 'Affiliation', value: 'affiliation', left: true },
-            { text: 'Job', value: 'job', left: true },
-            { text: 'Hotel', value: 'hotelOption', left: true },
-            { text: 'Check-in', value: 'hotelStartDate', left: true },
-            { text: 'Check-out', value: 'hotelEndDate', left: true },
-            { text: 'Poster', value: 'doPoster', left: true },
-            { text: 'Oral', value: 'doOral', left: true },
-            { text: 'Talk time', value: 'oralTime', left: true },
-            { text: 'Tour', value: 'joinTour', left: true },
-            { text: 'Title', value: 'title', left: true },
-            { text: 'Abs', value: 'hasAbstract', left: true },
-            { text: 'Sp', value: 'hasSpecial', left: true },
-            { text: 'ID', value: 'id', left: true },
-            // { text: 'Key', value: 'key', left: true }
-          ],
           regs: [],
           loading: true,
-          dialog: {
-            show: false,
-            who: '',
-            type: '',
-            content: ''
+          selected: false,
+          list: ['time', 'name', 'email', 'affiliation', 'job', 'hotelOption', 'hotelStartDate', 'hotelEndDate',
+            'doPoster', 'doOral', 'oralTime', 'joinTour', 'title', 'abstract', 'special', 'id', 'key'
+          ],
+          nametable: {
+            time: 'Last edit Time',
+            name: 'Name',
+            email: 'Email',
+            affiliation: 'Affiliation',
+            job: 'Job',
+            hotelOption: 'Hotel',
+            hotelStartDate: 'Check-in',
+            hotelEndDate: 'Check-out',
+            doPoster: 'Poster',
+            doOral: 'Oral',
+            oralTime: 'Talk time',
+            joinTour: 'Tour',
+            title: 'Title',
+            abstract: 'Abstract',
+            special: 'Special',
+            id: 'ID',
+            key: 'Key'
+          },
+          show: {
+            time: false,
+            name: true,
+            email: false,
+            affiliation: true,
+            job: true,
+            hotelOption: true,
+            hotelStartDate: true,
+            hotelEndDate: true,
+            doPoster: true,
+            doOral: true,
+            oralTime: true,
+            joinTour: false,
+            title: true,
+            abstract: false,
+            special: true,
+            id: false,
+            key: false,
           }
         }
       },
@@ -192,6 +166,11 @@
             me.clearLogin()
           }
         })
+      },
+      computed: {
+        init: function () {
+          return !this.notauth && !this.selected;
+        }
       },
       methods: {
         clearLogin: function () {
@@ -261,7 +240,8 @@
             data.abstract = ''
           }
           // handle true/false
-          var t = 'done', f = 'clear';
+          var t = 'yes', f = 'no';
+          // var t = 'done', f = 'clear';
           // var t = 'v', f = 'x';
           // var t = '√', f = '×';
           if (!data.hotel) {
