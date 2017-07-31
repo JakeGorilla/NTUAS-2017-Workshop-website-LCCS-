@@ -87,3 +87,9 @@ main {
   margin: initial !important;
   margin-right: 16px !important;
 }*/
+
+p.MsoNormalCxSpFirst,
+p.MsoNormalCxSpMiddle {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
