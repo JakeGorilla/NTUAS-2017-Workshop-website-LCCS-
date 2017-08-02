@@ -3,7 +3,6 @@
     ".write": "true",
     ".read": "auth.uid === 'jL9aHKOyOOTOsd6CX0P4TMjpKY62'",
     "edit": {
-      ".read": "false",
       ".write": "true",
       "$id": {
         ".read": "true",
@@ -17,7 +16,7 @@
       }
     },
     "reg": {
-      ".read": "false",
+      ".read": "true",
       "$id": {
         ".validate": "newData.hasChildren(['id','nameTitle','nameFirst','nameLast','email','affiliation','job','hotel','hotelOption','hotelStartDate','hotelEndDate','doOral','oralWithPoster','doPoster','joinTour','title','abstract','oralTime','special','timestamp'])",
         "email": {

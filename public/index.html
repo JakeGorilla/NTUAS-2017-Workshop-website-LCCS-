@@ -19,6 +19,10 @@
   <link href="https://unpkg.com/vuetify@0.12.7/dist/vuetify.min.css" rel="stylesheet" type="text/css">
   <!-- my style -->
   <link rel="stylesheet" href="index.css">
+  <!-- firebase -->
+  <script src="/__/firebase/4.1.2/firebase-app.js"></script>
+  <script src="/__/firebase/4.1.2/firebase-database.js"></script>
+  <script src="/__/firebase/init.js"></script>
 </head>
 
 <body>
@@ -212,6 +216,153 @@
       template: '<base-content-card :title="title" :contentHtml="contentHtml"></base-content-card>'
     }
 
+    var abstract = {
+      data: function () {
+        return {
+          loading: true,
+          title: 'Abstract',
+          contentHtml: ''
+        }
+      },
+      computed: {
+        items: function () {
+          var res = []
+          var me = this
+          firebase.database().ref('reg').once('value').then(function (snap) {
+            if (snap.exists()) {
+              var data = snap.val()
+              var keys = Object.keys(data)
+              keys.forEach(function (key) {
+                // console.log(key)
+                var trimed = me.processReg(key, data[key])
+                if(!trimed.empty){
+                  console.log(trimed)
+                  res.push(trimed)
+                }
+              })
+              me.loading = false
+            }
+          })
+          return res
+        }
+      },
+      template: '<base-content-card id="abs" :title="title">\
+                  <v-progress-linear indeterminate v-if="loading" error></v-progress-linear>\
+                  <v-expansion-panel>\
+                    <v-expansion-panel-content v-for="(item,i) in items" :key="i"  pa-0>\
+                      <v-layout slot="header">\
+                        <v-flex xs2><b>{{item.name}}</b></v-flex>\
+                        <v-flex xs9><span>{{item.title}}</span></v-flex>\
+                      </v-layout>\
+                      <v-card>\
+                        <v-card-text class="white content">\
+                          <p class="grey--text text--darken-1"><b>Affiliation:</b> {{item.affiliation}}</p>\
+                          <p>{{item.abstract}}</p>\
+                        </v-card-text>\
+                      </v-card>\
+                    </v-expansion-panel-content>\
+                  </v-expansion-panel>\
+                </base-content-card>',
+      methods: {
+        processReg: function (key, data) {
+          data = Object.assign({}, data)
+          // replace string
+          if (!data.doOral && !data.doPoster) {
+            return {empty:true}
+          }
+          if (!data.title) {
+            data.title = '-'
+          }
+          if (data.hotelOption == 'Hsiu-Chi House') {
+            data.hotelOption = 'HC'
+          } else if (data.hotelOption == 'Just Sleep') {
+            data.hotelOption = 'JS'
+          }
+          if (data.hotelStartDate) {
+            data.hotelStartDate = data.hotelStartDate.replace('2017-', '')
+            data.hotelStartDate = data.hotelStartDate.replace('-', '/')
+          }
+          if (data.hotelEndDate) {
+            data.hotelEndDate = data.hotelEndDate.replace('2017-', '')
+            data.hotelEndDate = data.hotelEndDate.replace('-', '/')
+          }
+          if (data.oralTime) {
+            data.oralTime = data.oralTime.replace('Talk ', '')
+          }
+          if (data.abstract.match(/tbd/i) && data.abstract.length < 5) {
+            data.abstract = ''
+          }
+          // handle true/false
+          var t = 'done',
+            f = 'clear';
+          // var t = 'v', f = 'x';
+          // var t = '√', f = '×';
+          if (!data.hotel) {
+            data.hotelOption = '-'
+            data.hotelStartDate = '-'
+            data.hotelEndDate = '-'
+            data.hotel = ''
+          } else {
+            data.hotel = t
+          }
+          if (data.doPoster) {
+            data.doPoster = t
+            data.oralTime = '-'
+            data.doOral = f
+          } else {
+            data.doPoster = f
+            if (!data.doOral) {
+              // data.oralWithPoster = '-'
+              data.oralTime = '-'
+              data.doOral = f
+            } else {
+              data.doOral = t
+              if (data.oralWithPoster) {
+                data.doPoster = t
+              }
+            }
+          }
+          if (!data.joinTour) {
+            data.joinTour = f
+          } else {
+            data.joinTour = t
+          }
+          if (!data.abstract) {
+            data.hasAbstract = f
+          } else {
+            data.hasAbstract = t
+          }
+          if (!data.special) {
+            data.hasSpecial = f
+          } else {
+            data.hasSpecial = t
+          }
+          return {
+            name: data.nameTitle + ' ' + data.nameFirst + ' ' + data.nameLast,
+            // email: data.email,
+            affiliation: data.affiliation,
+            // job: data.job,
+            // hotel: data.hotel,
+            // hotelOption: data.hotelOption,
+            // hotelStartDate: data.hotelStartDate,
+            // hotelEndDate: data.hotelEndDate,
+            doPoster: data.doPoster,
+            doOral: data.doOral,
+            // oralTime: data.oralTime,
+            // joinTour: data.joinTour,
+            title: data.title,
+            hasAbstract: data.hasAbstract,
+            // hasSpecial: data.hasSpecial,
+            abstract: data.abstract,
+            // special: data.special,
+            // id: data.id,
+            // key: key,
+            time: new Date(data.timestamp)
+          }
+        }
+      }
+    }
+
     var registration = {
       data: function () {
         return {
@@ -267,9 +418,12 @@
         path: '/tour',
         component: tour
       }, {
+        path: '/abstract',
+        component: abstract
+      }, {
         path: '/registration',
         component: registration
-      },]
+      }, ]
     })
 
     var app = new Vue({
@@ -296,6 +450,9 @@
             //   title: 'Tour',
             //   to: '/#/tour'
             // }, {
+            title: 'Abstract',
+            to: '/#/abstract'
+          }, {
             title: 'Registration',
             to: '/#/registration'
           }],
