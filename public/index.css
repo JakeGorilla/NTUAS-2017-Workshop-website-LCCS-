@@ -102,11 +102,11 @@ p.MsoNormalCxSpMiddle {
   width: 100%;
 }
 
-#abs .expansion-panel__header>.layout>div,
+/* #abs .expansion-panel__header>.layout>div,
 #abs .expansion-panel__header>.layout>div>span {
   padding-top: 8px;
   padding-bottom: 8px;
-}
+} */
 
 #abs .content {
   padding-top: 8px;

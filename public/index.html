@@ -250,9 +250,9 @@
                   <v-progress-linear indeterminate v-if="loading" error></v-progress-linear>\
                   <v-expansion-panel>\
                     <v-expansion-panel-content v-for="(item,i) in items" :key="i"  pa-0>\
-                      <v-layout slot="header">\
-                        <v-flex xs2><b>{{item.name}}</b></v-flex>\
-                        <v-flex xs9><span>{{item.title}}</span></v-flex>\
+                      <v-layout slot="header" row-sm column py-2>\
+                        <v-flex xs11 sm3 py-0><b>{{item.name}}</b></v-flex>\
+                        <v-flex xs11 sm8 py-0><span>{{item.title}}</span></v-flex>\
                       </v-layout>\
                       <v-card>\
                         <v-card-text class="white content">\
