@@ -147,7 +147,7 @@
                 <v-text-field label="Title" v-model="title" required></v-text-field>
                 <v-select v-bind:items="timeOptions" v-model="oralTime" label="Prefered talk time" :hint="talkTimeHint" :persistent-hint="!oralWithPoster"
                   single-line required class="my-0" :class="oralTime=='Talk 5 mins'?'not-suggest':''"></v-select>
-                <v-text-field label="Abstract" v-model="abstract" :hint="hintOralAbs" persistent-hint counter max="500" multi-line></v-text-field>
+                <v-text-field label="Abstract" v-model="abstract" :hint="hintOralAbs" persistent-hint multi-line></v-text-field>
               </v-container>
             </v-container>
           </div>
@@ -160,7 +160,7 @@
                   later by your ID obtaining after a successful registration.
                 </div>
                 <v-text-field label="Title" v-model="title" required></v-text-field>
-                <v-text-field label="Abstract" v-model="abstract" :hint="hintPosterAbs" persistent-hint counter max="500" multi-line></v-text-field>
+                <v-text-field label="Abstract" v-model="abstract" :hint="hintPosterAbs" persistent-hint multi-line></v-text-field>
               </v-container>
             </v-container>
           </div>
