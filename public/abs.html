@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Abstracts for print or offline use</title>
+  <!-- Font library and icon pack -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <!-- for IE -->
+  <script src="IE-compatible.js"></script>
+  <!-- Vue -->
+  <script src="vue.2.4.2.min.js"></script>
+  <!-- Vuetify.js required files -->
+  <script src="vuetify.0.12.7.min.js"></script>
+  <link href="vuetify.0.12.7.min.css" rel="stylesheet" type="text/css">
+  <!-- firebase -->
+  <script src="/__/firebase/4.1.2/firebase-app.js"></script>
+  <script src="/__/firebase/4.1.2/firebase-auth.js"></script>
+  <script src="/__/firebase/4.1.2/firebase-database.js"></script>
+  <script src="/__/firebase/init.js"></script>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    #app {
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    h1 {
+      text-align: center;
+      line-height: 1.2;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .author {
+      text-align: center;
+      font-weight: bold !important;
+    }
+
+    @media screen {
+      .box {
+        margin: auto;
+        max-width: 800px;
+        left: 0;
+        right: 0;
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-bottom: 36px;
+      }
+      h1 {
+        margin-top: 24px;
+        color: rgba(0, 0, 0, 0.87);
+      }
+    }
+
+    @media print {
+      .box {
+        color: black !important;
+        font-family: "Times New Romen";
+      }
+      .progress {
+        display: none;
+      }
+      h1 {
+        color: black;
+        page-break-before: always;
+      }
+      div>h1:first-child {
+        page-break-before: avoid;
+      }
+      .author {
+        color: black;
+      }
+      .abs {
+        font-size: 16px;
+        font-weight: initial;
+      }
+      .divider {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <v-app id="app" class="white">
+    <div v-cloak class="box">
+      <v-progress-linear :active="loading" :indeterminate="true" class="progress"></v-progress-linear>
+      <div v-for="(item,i) in regs">
+        <v-divider v-if="i>0" class="divider my-5"></v-divider>
+        <h1 class="text-xs-center">{{item.title}}</h1>
+        <div class="author subheading text-xs-center mb-3">{{item.name}}</div>
+        <div class="abs" v-html="item.abstract"></div>
+      </div>
+    </div>
+  </v-app>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          notauth: true,
+          acc: '',
+          p: '',
+          regs: [],
+          loading: true
+        }
+      },
+      mounted: function () {
+        var res = []
+        var me = this
+        firebase.database().ref('reg').once('value').then(function (snap) {
+          if (snap.exists()) {
+            var data = snap.val()
+            var keys = Object.keys(data)
+            keys.forEach(function (key) {
+              // console.log(key)
+              var trimed = me.processReg(key, data[key])
+              if (!trimed.empty && trimed.hasAbstract) {
+                // console.log(trimed)
+                console.log(trimed.hasAbstract)
+                res.push(trimed)
+              }
+            })
+            res.sort(function (a, b) {
+              function titleOrder(title) {
+                if (title === 'Prof.') return 1
+                else if (title === 'Dr.') return 2
+                else if (title === 'Ms.') return 3
+                else return 4
+              }
+              var a1 = titleOrder(a.nameTitle)
+              var b1 = titleOrder(b.nameTitle)
+              if (a1 > b1) return 1
+              else if (a1 < b1) return -1
+
+              if (a1 === b1) {
+                if (a.name > b.name) return 1
+                else if (a.name < b.name) return -1
+              }
+
+              return 0
+            })
+            me.loading = false
+            me.regs = res
+            setTimeout(function () {
+              window.print()
+            }, 600);
+          }
+        })
+      },
+      methods: {
+        showContent: function (item, type) {
+          this.dialog.who = item.name
+          this.dialog.type = type
+          this.dialog.content = item[type]
+          this.dialog.show = true
+        },
+        processReg: function (key, data) {
+          data = Object.assign({}, data)
+          // replace string
+          if (!data.doOral && !data.doPoster) {
+            return {
+              empty: true
+            }
+          }
+          if (!data.title) {
+            data.title = '-'
+          }
+          if (data.hotelOption == 'Hsiu-Chi House') {
+            data.hotelOption = 'HC'
+          } else if (data.hotelOption == 'Just Sleep') {
+            data.hotelOption = 'JS'
+          }
+          if (data.hotelStartDate) {
+            data.hotelStartDate = data.hotelStartDate.replace('2017-', '')
+            data.hotelStartDate = data.hotelStartDate.replace('-', '/')
+          }
+          if (data.hotelEndDate) {
+            data.hotelEndDate = data.hotelEndDate.replace('2017-', '')
+            data.hotelEndDate = data.hotelEndDate.replace('-', '/')
+          }
+          if (data.oralTime) {
+            data.oralTime = data.oralTime.replace('Talk ', '')
+          }
+          if (data.abstract.match(/tbd/i) && data.abstract.length < 5) {
+            data.abstract = ''
+          }
+          // handle true/false
+          var t = true,
+            f = false;
+          // var t = 'v', f = 'x';
+          // var t = '√', f = '×';
+          if (!data.hotel) {
+            data.hotelOption = '-'
+            data.hotelStartDate = '-'
+            data.hotelEndDate = '-'
+            data.hotel = ''
+          } else {
+            data.hotel = t
+          }
+          if (data.doPoster) {
+            data.doPoster = t
+            data.oralTime = '-'
+            data.doOral = f
+          } else {
+            data.doPoster = f
+            if (!data.doOral) {
+              // data.oralWithPoster = '-'
+              data.oralTime = '-'
+              data.doOral = f
+            } else {
+              data.doOral = t
+              if (data.oralWithPoster) {
+                data.doPoster = t
+              }
+            }
+          }
+          if (!data.joinTour) {
+            data.joinTour = f
+          } else {
+            data.joinTour = t
+          }
+          if (!data.abstract) {
+            data.hasAbstract = f
+          } else {
+            data.hasAbstract = t
+          }
+          if (!data.special) {
+            data.hasSpecial = f
+          } else {
+            data.hasSpecial = t
+          }
+          return {
+            name: data.nameTitle + ' ' + data.nameFirst + ' ' + data.nameLast,
+            nameTitle: data.nameTitle,
+            // email: data.email,
+            affiliation: data.affiliation,
+            // job: data.job,
+            // hotel: data.hotel,
+            // hotelOption: data.hotelOption,
+            // hotelStartDate: data.hotelStartDate,
+            // hotelEndDate: data.hotelEndDate,
+            doPoster: data.doPoster,
+            doOral: data.doOral,
+            // oralTime: data.oralTime,
+            // joinTour: data.joinTour,
+            title: data.title,
+            hasAbstract: data.hasAbstract,
+            // hasSpecial: data.hasSpecial,
+            abstract: data.abstract.replace(/\n/g, '<br>'),
+            // special: data.special,
+            // id: data.id,
+            // key: key,
+            time: new Date(data.timestamp)
+          }
+        },
+      }
+    })
+  </script>
+</body>
+
+</html>
