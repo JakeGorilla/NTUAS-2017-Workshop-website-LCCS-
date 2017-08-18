@@ -726,7 +726,7 @@
                         <v-flex xs11 sm8 py-0><span>{{item.title}}</span></v-flex>\
                       </v-layout>\
                       <v-card>\
-                        <v-card-text class="white content">\
+                        <v-card-text class="white content pt-1">\
                           <p class="grey--text text--darken-2 mb-0"><b>Affiliation:</b> {{item.affiliation}}</p>\
                           <v-divider class="my-3 grey lighten-3" v-if="item.hasAbstract"></v-divider>\
                           <p v-html="item.abstract"></p>\
@@ -737,7 +737,7 @@
                 </base-content-card>',
       methods: {
         print: function print() {
-          var w = window.open('abs.html')
+          var w = window.open('abs.html?print=yes')
         },
         processReg: function (key, data) {
           data = Object.assign({}, data)
