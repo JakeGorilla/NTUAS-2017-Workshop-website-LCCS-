@@ -66,14 +66,24 @@
   <!-- main render -->
   <script>
     Vue.component('base-content-card', {
-      props: ['title', 'shortTitle', 'contentHtml', 'titleAction', 'actionFunc'],
+      props: {
+        title: String,
+        shortTitle: String,
+        contentHtml: String,
+        titleAction: String,
+        actionFunc: Object,
+        hideTitle: {
+          type: Boolean,
+          default: false
+        }
+      },
       computed: {
         sTitle: function () {
           return this.shortTitle ? this.shortTitle : this.title
         }
       },
       template: '<v-card class="min-height v-slide-x-transition">\
-                  <v-card-row class="grey darken-4" height="44px">\
+                  <v-card-row v-if="!hideTitle" class="grey darken-4" height="44px">\
                     <v-card-title class="hidden-xs-only">\
                       <span class="white--text sec-title">{{ title }}</span>\
                       <v-spacer v-if="titleAction"></v-spacer>\
@@ -95,33 +105,49 @@
       data: function () {
         return {
           title: 'Home',
+          pics: [
+            {
+              name: 'group1',
+              src: 'group1.jpg'
+            },
+            {
+              name: 'group2',
+              src: 'group2.jpg'
+            }
+          ],
           contentHtml: '<h6 class="title">Workshop for Typhoon, cloud and climate study</h6>\
                         <div class="subheading mb-3">August 22-24, 2017</div>\
                         <p class="b1">Following the spirits of the previous University Allied Workshop (UAW) but at a smaller scale and with a more focused scope, a workshop was organized by Prof. Masaki Satoh during the period Sep. 29―Oct. 1, 2015, at the Atmosphere and Ocean Research Institute, the University of Tokyo. A follow-up of the workshop is being organized for the period of August 22-24, 2017 in the Department of Atmospheric Sciences, National Taiwan University. The workshop focuses on studies of climate change, climate oscillations, typhoons, and convective-water cycling processes. The recent advances of theories, observations and high resolution modeling provide great opportunities for basic research on convection and water cycle and their interaction with weather and climate. But the complex nature of the relevant scientific issues and the huge amount of data pose great challenges for synthesizing all information to make breakthroughs in such studies. You are invited to participate the workshop to share your recent research results and to jointly synthesize outstanding research issues to promote communications and collaborations.</p>'
         }
       },
-      template: '<base-content-card :title="title">\
-                  <v-layout row-sm column ma-0 pa-3>\
-                    <v-flex v-html="contentHtml" pa-0 mb-3 order-sm1 order-xs2 flex1></v-flex>\
-                    <v-flex mx-1 my-0 pa-0 hidden-xs-only order-sm2 ></v-flex>\
-                    <v-flex pa-0 mb-3 order-sm2 order-xs1 homeside>\
-                      <v-card class="ma-0 amber accent-2">\
-                        <v-subheader>Important Dates</v-subheader>\
-                        <v-container fluid class="px-3 pb-3 pt-0">\
-                          <span class="body-2">Jun 30, 2017</span><br>\
-                          Registration Deadline<br>\
-                          <v-divider class="my-3"></v-divider>\
-                          <span class="body-2">Jul 7, 2017</span><br>\
-                          Presentation Schedule Announcement<br>\
-                        </v-container>\
-                        <v-divider class="amber accent-3 mt-2"></v-divider>\
-                        <v-subheader>Contact Information</v-subheader>\
-                        <v-container fluid class="px-3 pb-3 pt-0">\
-                          Tel: +886 3366-3940<br>\
-                          Email: lccs@as.ntu.edu.tw\
-                        </v-container>\
-                      </v-card>\
-                    </v-flex>\
+      template: '<base-content-card :title="title" :hideTitle="true">\
+                  <v-layout column ma-0 pa-0>\
+                    <v-carousel style="height:282px;">\
+                      <v-carousel-item v-for="(pic,i) in pics" v-bind:src="pic.src" :key="i"></v-carousel-item>\
+                    </v-carousel>\
+                    <v-layout row-sm column ma-0 pa-3>\
+                      <v-flex v-html="contentHtml" pa-0 mb-3 order-sm1 order-xs2 flex1></v-flex>\
+                      <v-flex mx-1 my-0 pa-0 hidden-xs-only order-sm2 ></v-flex>\
+                      <v-flex pa-0 mb-3 order-sm2 order-xs1 homeside>\
+                        <v-card class="ma-0 amber accent-2">\
+                          <v-subheader>Important Dates</v-subheader>\
+                          <v-container fluid class="px-3 pb-3 pt-0">\
+                            <span class="body-2">Jun 30, 2017</span><br>\
+                            Registration Deadline<br>\
+                            <v-divider class="my-3"></v-divider>\
+                            <span class="body-2">Jul 7, 2017</span><br>\
+                            Presentation Schedule Announcement<br>\
+                          </v-container>\
+                          <v-divider class="amber accent-3 mt-2"></v-divider>\
+                          <v-subheader>Contact Information</v-subheader>\
+                          <v-container fluid class="px-3 pb-3 pt-0">\
+                            Tel1: +886 3366-3940<br>\
+                            Tel2: +886 3366-4955<br>\
+                            Email: lccs@as.ntu.edu.tw\
+                          </v-container>\
+                        </v-card>\
+                      </v-flex>\
+                    </v-layout>\
                   </v-layout>\
                 </base-content-card>'
     }
@@ -136,7 +162,7 @@
                               <th colspan="2">8/22</th>\
                             </tr>\
                             <tr>\
-                              <td rowspan="6">8:30~10:00</td>\
+                              <td rowspan="5">8:45~10:00</td>\
                               <td>\
                                 <div>OPENING</div>\
                                 <div>Prof. Sui &amp; Prof. Satoh</div>\
@@ -146,13 +172,6 @@
                                 <td>\
                                   <div>The roles of WISHE in SEF and RI in tropical cyclones.</div>\
                                   <div>Prof. Chun-Chieh Wu, NTU</div>\
-                                  <div>15 min</div>\
-                                </td>\
-                              </tr>\
-                              <tr>\
-                                <td>\
-                                  <div>A Sub-kilometer Modeling Study of the Severe Thunderstorm Event with Urban Flooding at Taipei on 14 June 2015</div>\
-                                  <div>Prof. Ming-Jen Yang, NTU</div>\
                                   <div>15 min</div>\
                                 </td>\
                               </tr>\
@@ -185,7 +204,7 @@
                                 </td>\
                               </tr>\
                               <tr>\
-                                <td rowspan="7">10:30~12:00</td>\
+                                <td rowspan="6">10:30~11:50</td>\
                                 <td>\
                                   <div>Goddard Multi-scale Modeling Systems to Study Precipitation and Aerosol Interactive Processes</div>\
                                   <div>Dr. Wei-Kuo Tao, NASA</div>\
@@ -217,33 +236,27 @@
                                 <td>\
                                   <div>The effect of Bonin high on the termination of the monsoon gyre in August 2016</div>\
                                   <div>Mr. Takuya Jinno, EPS</div>\
-                                  <div>5 min</div>\
+                                  <div>10 min</div>\
                                 </td>\
                               </tr>\
                               <tr>\
                                 <td>\
                                   <div>The susceptibility of East Asian marine warm clouds to aerosol index during Winter and Spring from satellite observation</div>\
                                   <div>Ms. Chiao-Wei Chang, NTU</div>\
-                                  <div>5 min</div>\
+                                  <div>10 min</div>\
                                 </td>\
                               </tr>\
                               <tr>\
-                                <td>\
-                                  <div>DISCUSSION</div>\
-                                  <div>20 min</div>\
-                                </td>\
-                              </tr>\
-                              <tr>\
-                                <td>12:00~13:30</td>\
+                                <td>11:50~13:30</td>\
                                 <td>\
                                   <div>LUNCH</div>\
-                                  <div>90 min</div>\
+                                  <div>100 min</div>\
                                 </td>\
                               </tr>\
                               <tr>\
                                 <td rowspan="6">13:30~15:00</td>\
                                 <td>\
-                                  <div>Effects of Surface Orography and Land–Sea Contrast on the Madden–Julian Oscillation in the Maritime Continent: A Numerical Study Using ECHAM5-SIT</div>\
+                                  <div>Extratropical Forcing Triggered the 2015 Madden–Julian Oscillation–El Niño Event</div>\
                                   <div>Prof. Huang-Hsiung Hsu, RCEC</div>\
                                   <div>15 min</div>\
                                 </td>\
@@ -271,14 +284,15 @@
                               </tr>\
                               <tr>\
                                 <td>\
-                                  <div>The interaction between diurnal cycle precipitation and MJO over the Maritime Continent in a multi-scale global climate model</div>\
-                                  <div>Mr. Chin-Chieh Chou, NTU</div>\
+                                  <div>Investigating the systematic biases in 2016 SCS summer monsoon onset simulation using CWB-GFS by hindcast approach</div>\
+                                  <div>Mr. Chun-Yian Su, NTU</div>\
                                   <div>15 min</div>\
                                 </td>\
                               </tr>\
                               <tr>\
                                 <td>\
-                                  <div>DISCUSSION</div>\
+                                  <div>A Sub-kilometer Modeling Study of the Severe Thunderstorm Event with Urban Flooding at Taipei on 14 June 2015</div>\
+                                  <div>Prof. Ming-Jen Yang, NTU</div>\
                                   <div>15 min</div>\
                                 </td>\
                               </tr>\
@@ -290,7 +304,7 @@
                                 </td>\
                               </tr>\
                               <tr>\
-                                <td rowspan="8">15:30~17:00</td>\
+                                <td rowspan="7">15:30~17:00</td>\
                                 <td>\
                                   <div>Extreme precipitation changes over the Maritime Continent under deforestation and global warming</div>\
                                   <div>Prof. Min-Hui Lo, NTU</div>\
@@ -322,27 +336,21 @@
                                 <td>\
                                   <div>ENSO"s Phase-locking to Seasonal Cycle</div>\
                                   <div>Mr. Chung-Wei Lee, NTU</div>\
-                                  <div>5 min</div>\
+                                  <div>10 min</div>\
                                 </td>\
                               </tr>\
                               <tr>\
                                 <td>\
                                   <div>The Philippine sea anomalous abductions during ENSO decaying phase</div>\
                                   <div>Mr. Erh-Tung Wu, NTU</div>\
-                                  <div>5 min</div>\
+                                  <div>10 min</div>\
                                 </td>\
                               </tr>\
                               <tr>\
                                 <td>\
                                   <div>Have Inter-Decadal Pacific Oscillation contributed to the observed cloud trend in satellite?</div>\
                                   <div>Mr. Yong-Jhih Chen, NTU</div>\
-                                  <div>5 min</div>\
-                                </td>\
-                              </tr>\
-                              <tr>\
-                                <td>\
-                                  <div>DISCUSSION</div>\
-                                  <div>15 min</div>\
+                                  <div>10 min</div>\
                                 </td>\
                               </tr>\
                               <tr>\
@@ -384,34 +392,34 @@
                             <td>\
                               <div>Model spread in cloud feedback traced to evolving pattern of surface warming under Abrupt4xCO2 in CMIP5 GCMs</div>\
                               <div>Ms. Yuan-Jen Lin, NTU</div>\
-                              <div>5 min</div>\
+                              <div>10 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
                             <td>\
                               <div>Understanding the Evolution of Anthropogenic Forced Climate Change using CESM Large Ensemble Project</div>\
                               <div>Ms. I-Han Tseng, NTU</div>\
-                              <div>5 min</div>\
+                              <div>10 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
                             <td>\
                               <div>Understanding the timescale &amp; mechanisms of extratropical forcings influencing the tropics</div>\
                               <div>Mr. Po-Chun Chung, NTU</div>\
-                              <div>5 min</div>\
+                              <div>10 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
                             <td>\
                               <div>Impact of natural multi-decadal variability on global mean temperature</div>\
                               <div>Mr. Yudai Sekine, AORI</div>\
-                              <div>5 min</div>\
+                              <div>10 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
                             <td>\
                               <div>DISCUSSION</div>\
-                              <div>25 min</div>\
+                              <div>5 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
@@ -432,7 +440,6 @@
                             <td>13:00~17:30</td>\
                             <td>\
                               <div>FIELD TRIP</div>\
-                              <div>270 min</div>\
                             </td>\
                           </tr>\
                         </tbody>\
@@ -443,7 +450,7 @@
                             <th colspan="2">8/24</th>\
                           </tr>\
                           <tr>\
-                            <td rowspan="8">08:30~10:00</td>\
+                            <td rowspan="8">08:30~10:15</td>\
                             <td>\
                               <div>Tropical Cyclone-Ocean Interaction and Global Warming</div>\
                               <div>Prof. II Lin, NTU</div>\
@@ -482,35 +489,35 @@
                             <td>\
                               <div>Relationship between tropical cyclone size change and precipitation distribution</div>\
                               <div>Dr. Hiroki Tsuji, AORI</div>\
-                              <div>5 min</div>\
+                              <div>10 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
                             <td>\
                               <div>Differences in tropical cyclogenesis in North Pacific between the strong El Nino years 1997 and 2015 investigated by perpetual July experiments with the 56 km mesh NICAM</div>\
                               <div>Mr. Takahiro Ishiyama, AORI</div>\
-                              <div>5 min</div>\
+                              <div>10 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
                             <td>\
                               <div>Air-Sea Fluxes for Hurricane Patricia (2015): Comparison with Supertyphoon Haiyan (2013) and under Different ENSO Conditions</div>\
                               <div>Ms. Hsiao-Ching Huang, NTU</div>\
-                              <div>5 min</div>\
+                              <div>10 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
-                            <td>10:00~11:55</td>\
+                            <td>10:15~12:15</td>\
                             <td>\
                               <div>POSTER (II) &amp; TEA TIME</div>\
-                              <div>115 min</div>\
+                              <div>120 min</div>\
                             </td>\
                           </tr>\
                           <tr>\
-                            <td>11:55~12:00</td>\
+                            <td>12:15~12:30</td>\
                             <td>\
                               <div>CLOSING</div>\
-                              <div>5 min</div>\
+                              <div>15 min</div>\
                             </td>\
                           </tr>\
                         </tbody>\
@@ -520,16 +527,12 @@
                           <tr>\
                             <th colspan="2">\
                               POSTER (I)<br>\
-                              8/23 10:00~12:00\
+                              8/23 10:15~12:15\
                             </th>\
                           </tr>\
                           <tr>\
                             <td>Dr. Atsushi Hamada</td>\
                             <td><div>Convective cloud-top vertical velocity estimated from geostationary satellite rapid-scan measurements</div></td>\
-                          </tr>\
-                          <tr>\
-                            <td>Dr. Ying-Wen Chen</td>\
-                            <td><div>High Cloud Responses to Global Warming Simulated by Two Different Cloud Microphysics Schemes Implemented in the Nonhydrostatic Icosahedral Atmospheric Model</div></td>\
                           </tr>\
                           <tr>\
                             <td>Dr. Yuen Yi Ng</td>\
@@ -554,10 +557,6 @@
                           <tr>\
                             <td>Mr. Shih-Wne Tsou</td>\
                             <td><div>Application of machine learning to predict cloud core numbers</div></td>\
-                          </tr>\
-                          <tr>\
-                            <td>Mr. Chunyian Su</td>\
-                            <td><div>Investigating the systematic biases in 2016 SCS summer monsoon onset simulation using CWB-GFS by hindcast approach</div></td>\
                           </tr>\
                           <tr>\
                             <td>Mr. Wei-Jen Tseng</td>\
@@ -586,6 +585,14 @@
                           <tr>\
                             <td>Mr. Shuhei Matsugishi</td>\
                             <td><div>Characteristic length scales of self-aggregation of convection under radiative convective equilibrium and their sensitivity to environmental parameters</div></td>\
+                          </tr>\
+                          <tr>\
+                            <td>Mr. Shi-Pei Hsu</td>\
+                            <td><div>Tropical Intraseasonal Weather Analysis in December 2016</div></td>\
+                          </tr>\
+                          <tr>\
+                            <td>Mr. Ching-Hsuan Wu</td>\
+                            <td><div>Influence of Intraseasonal-Interannual Oscillations on Tropical Cyclone Genesis in the Western North Pacific</div></td>\
                           </tr>\
                         </tbody>\
                       </table>\
@@ -856,6 +863,17 @@
                       <li>\
                         Location: B1F., No.85, Sec. 4, Roosevelt Rd., Zhongzheng Dist., Taipei City 100, Taiwan R.O.C.<br>\
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3615.6215939928816!2d121.53419231554349!3d25.012970983982157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a98aa2eabfa5%3A0xd5d5d639129dae83!2z6ZuG5oCd5Y-w5aSn5pyD6K2w5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1497728453456" frameborder="0" class="map" allowfullscreen></iframe>\
+                      </li>\
+                    </ul>\
+                  </div>\
+                  <v-divider class="my-4"></v-divider>\
+                  <div class="px-3 pb-3">\
+                    <h6 class="title">Banquet: Living One</h6>\
+                    <ul>\
+                      <li>Website: <a href="http://www.livingone.com.tw" target="_blank">http://www.livingone.com.tw</a></li>\
+                      <li>\
+                        Location: Search for Ming-Da Hall, NTU<br>\
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d451.93623521235935!2d121.54420000000002!3d25.017444!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x295aa628180e4524!2sLiving+One!5e0!3m2!1szh-TW!2sus!4v1503311151259" frameborder="0" class="map" allowfullscreen></iframe>\
                       </li>\
                     </ul>\
                   </div>\
